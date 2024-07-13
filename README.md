@@ -1,5 +1,18 @@
 # VIMod⚡
-My unnecessarily complicated Vim configuration.
+Vemod's unnecessarily complex Vim configuration.
+
+VIMod _(VIM + Vemod)_ is my personal Vim configuration, designed with the philosophy that complexity should reside in the configuration itself, not in the user's workflow and setup.
+
+The complexity of VIMod is hidden behind the scenes. The user only needs to include the VIMod runtime in their vimrc file to complete the initial installation, with no additional commands required, even if an existing Vim configuration is already in place.
+
+## Philosophy
+* Prioritize Vim's built-in features and native functionality to minimize usage of external plugins.
+* Design each component to be self-contained, with both setup and configuration in its own .vim file.
+* Ensure individual components can be removed without breaking the rest of the setup.
+* Keep default Vim behavior unchanged, relying on the leader key for most customizations.
+* Each programming or scripting language must have its own self-contained configuration file to adjust Vim's behavior to match the language's rules.
+* Local user settings should not be mixed with the base VIMod settings but instead written in the user's regular vimrc file.
+* Initial installation should require nothing more than the inclusion of the VIMod runtime in the user's existing vimrc file, with no additional commands needed for installation.
 
 ## Installation
 To install VIMod, follow these steps:
