@@ -6,7 +6,7 @@ To install VIMod, follow these steps:
 
 1. Clone the VIMod repository to your local machine.
 	```shell
-	git clone https://github.com/hezkore/vimod.git <path-to-vimfiles>
+	git clone https://github.com/hezkore/vimod.git <path-to-vimfiles>/vimod
 	```
 
 > [!NOTE]
