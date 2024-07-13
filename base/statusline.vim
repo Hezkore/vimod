@@ -1,3 +1,9 @@
+" Custom statusline
+
+" Always show the status line at the bottom
+set laststatus=2
+
+" Function to get the full name of the current mode
 function! ModeFullName()
 	let mode_name = {
 		\ 'n': 'NORMAL',
@@ -20,12 +26,10 @@ function! ModeFullName()
 		\ '!': 'SHELL',
 		\ 't': 'TERMINAL'
 		\ }
-	" Adjust for special cases like Visual Block mode
-	let current_mode = mode()
-	return get(mode_name, current_mode, '')
+	return get(mode_name, mode(), '')
 endfunction
 
-" Use autocommands to switch statusline highlight groups based on window focus
+" Set the statusline based on if the window is active or not
 augroup StatusLine
 	autocmd!
 	autocmd WinEnter * setlocal statusline=%!ActiveStatusLine()
@@ -33,7 +37,7 @@ augroup StatusLine
 augroup END
 set statusline=%!ActiveStatusLine()
 
-" function for setting an inactive statusline
+" Function for setting an inactive statusline
 function! InactiveStatusLine()
 	" Set the highlight group for the inactive statusline
 	let s:statusline = '%#TabLine#'
@@ -45,7 +49,7 @@ function! InactiveStatusLine()
 	return s:statusline
 endfunction
 
-" function for setting an active statusline
+" Function for setting an active statusline
 function! ActiveStatusLine()
 	let s:statusline = mode() != 'n' ? '%#QuickFixLine#' : '%#WildMenu#'
 	let s:statusline .= &buftype == 'help' ? (mode() != 'n' ? ' %h %{ModeFullName()}' : ' %h') : ' %{ModeFullName()}'
@@ -56,10 +60,10 @@ function! ActiveStatusLine()
 	let s:statusline .= mode() != 'n' ? '%#QuickFixLine#' : '%#CurSearch#'
 	let s:statusline .= StatusLinePos()
 	
-	" Return the statusline
 	return s:statusline
 endfunction
 
+" Function for setting the file information in the statusline
 function! StatusLineFile()
 	let s:statuslinefile = '%(%w %)'
 	let s:statuslinefile .= '%t'
@@ -71,6 +75,7 @@ function! StatusLineFile()
 	return s:statuslinefile
 endfunction
 
+" Function for setting the general information in the statusline
 function! StatusLineInfo()
 	let s:statuslineinfo = '%( %{&fileencoding?&fileencoding:&encoding}%)'
 	let s:statuslineinfo .= '[%{&fileformat}] '
@@ -78,10 +83,11 @@ function! StatusLineInfo()
 	return s:statuslineinfo
 endfunction
 
+" Function for setting the current position in the statusline
 function! StatusLinePos()
-	let s:statuslineending = '%( %p%% %)'
-	let s:statuslineending .= '㏑:%l/%L'
-	let s:statuslineending .= '☰℅:%v '
+	let s:statuslineending = '%( %P%)'
+	let s:statuslineending .= ' Ln%l/%L'
+	let s:statuslineending .= ', Col%v '
 	
 	return s:statuslineending
 endfunction

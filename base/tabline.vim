@@ -1,4 +1,5 @@
-" Define the tabline format
+" Custom tabline
+
 set showtabline=2
 function! CustomTabLine()
 	let s = ''

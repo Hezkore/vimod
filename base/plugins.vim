@@ -31,9 +31,6 @@ else
 	endif
 endif
 
-" Define a custom event called VIModPlugSettings
-"command! DoVIModPlugSettings doautocmd User VIModPlugSettings
-
 " Initialize vim-plug
 call plug#begin('~/.vim/plugged')
 
