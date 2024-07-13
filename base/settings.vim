@@ -21,8 +21,8 @@ set relativenumber
 " Set the width of the line numbers
 set numberwidth=6
 
-" Show a vertical line at the 80th column
-set colorcolumn=120
+" Show a vertical line at the 80th and 120th columns
+set colorcolumn=80,120
 
 " Show matching brackets when the cursor is over one
 set showmatch
@@ -63,9 +63,6 @@ set completeopt=menuone,preview,popup,noinsert,noselect
 
 " Allow hidden buffers to enable switching without saving
 set hidden
-
-" Disable swap files to avoid clutter and potential performance issues
-set noswapfile
 
 " Disable bell on errors (otherwise it triggers on every buffer switch)
 set belloff=error
@@ -115,6 +112,9 @@ set foldmethod=indent
 " Disable folding by default
 set nofoldenable
 
+" Add a column to show the fold level
+set foldcolumn=1
+
 " Allow the cursor to go one character past the end of the line
 set virtualedit+=block,onemore
 
@@ -138,7 +138,7 @@ set ffs=unix,dos,mac
 
 " Disable backup files and swap files
 set nobackup
-set nowb
+set nowritebackup
 set noswapfile
 
 " Don't redraw while executing macros
@@ -155,3 +155,6 @@ set nowrap
 
 " Ask for confirmation when closing an unsaved buffer
 set confirm
+
+" Return to last edit position when opening files
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

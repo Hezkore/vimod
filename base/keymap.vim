@@ -1,5 +1,8 @@
 " VIMod keymaps
 
+" DEBUG: Reload the .vimrc file
+nnoremap <silent> <F5> :source $MYVIMRC<CR> <BAR> :echomsg "Reloaded .vimrc"<CR> " Reload the .vimrc file
+
 " Set leader to space
 let mapleader = "\<Space>"
 
@@ -29,5 +32,11 @@ for i in range(1, 9)
 	execute 'nnoremap <silent> <Leader>'.i.' :buffer '.i.'<CR>'
 endfor
 
-" DEBUG: Reload the .vimrc file
-nnoremap <silent> <F5> :source $MYVIMRC<CR> <BAR> :echomsg "Reloaded .vimrc"<CR> " Reload the .vimrc file
+" Leader o toggles or focuses the Lexplore
+nnoremap <leader>o :call ToggleOrFocusLexplore()<CR>
+
+" Ctrl h, j, k, l to quickly switch buffers
+nnoremap <silent> <C-h> :bprevious!<CR>
+nnoremap <silent> <C-j> :bprevious!<CR>
+nnoremap <silent> <C-l> :bnext!<CR>
+nnoremap <silent> <C-k> :bnext!<CR>
