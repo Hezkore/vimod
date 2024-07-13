@@ -1,4 +1,4 @@
-" Vim Settings
+" VIMod Settings
 
 " Enable syntax highlighting
 syntax on

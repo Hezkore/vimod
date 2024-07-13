@@ -1,6 +1,8 @@
-" Vim Keymaps
+" VIMod Keymaps
 
-let mapleader = "\<Space>" " Set the leader key to Space
+" Set leader to space
+let mapleader = "\<Space>"
+
 nmap <silent> <leader>l :bnext!<CR> " Go to the next buffer
 nmap <silent> <leader>h :bprevious!<CR> " Go to the previous buffer
 nmap <silent> <leader>q :bp! <BAR> bd! #<CR> " Close the current buffer
