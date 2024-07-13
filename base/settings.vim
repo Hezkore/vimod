@@ -12,11 +12,20 @@ set cursorline
 " Show line numbers
 set number
 
+" Set the width of the line numbers
+set numberwidth=6
+
 " Show matching brackets when the cursor is over one
 set showmatch
 
 " Show command in status line
 set showcmd
+
+" Always keep one line around the cursor
+set scrolloff=1
+
+" Let Vim set the title of the terminal
+set title
 
 " Enable terminal colors if supported by Vim (not the terminal)
 if has("termguicolors")
@@ -77,4 +86,8 @@ set tabstop=4
 set shiftwidth=4
 
 " Allow the cursor to go one character past the end of the line
-set virtualedit=onemore
+set virtualedit+=block,onemore
+
+" Show whitespaces
+set listchars=tab:\¦\ ,nbsp:·,trail:·
+set list
