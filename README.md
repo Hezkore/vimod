@@ -3,7 +3,7 @@ Vemod's unnecessarily complex Vim configuration.
 
 VIMod _(VIM + Vemod)_ is my personal Vim configuration, designed with the philosophy that complexity should stay in the configuration itself, and out of the user's workflow and setup.
 
-The complexity of VIMod is hidden behind the scenes. The user only needs to include the VIMod runtime in their vimrc file to complete the initial installation, with no additional commands required, even if an existing Vim configuration is already in place. While removing the VIMod runtime will disable all VIMod features, and not break the user's existing Vim setup.
+The user only needs to include the VIMod runtime in their vimrc file to complete the initial installation, with no additional commands required. VIMod sits on top of the user's existing Vim configuration, and removing the VIMod runtime will disable all VIMod features.
 
 ## Philosophy
 * Prioritize Vim's built-in features and native functionality to minimize usage of external plugins.
@@ -25,7 +25,7 @@ To install VIMod, follow these steps:
 > [!NOTE]
 > `<path-to-vimfiles>` will depend on your OS. For Unix-based systems, you can use `~/.vim`. For Windows, you can use `$HOME/vimfiles`.
 
-2. Add the runtime to your `vimrc` file.
+2. Add the runtime at the top of your `vimrc` file.
 	```vim
 	runtime vimod/vimod.vim
 	```
