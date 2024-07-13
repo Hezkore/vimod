@@ -2,6 +2,6 @@
 let g:netrw_browse_split=0 " Open files in the same window
 let g:netrw_keepdir = 0 " Keep the current directory and the browsing directory synced
 let g:netrw_banner = 0 " Disable the banner
-let g:netrw_liststyle=3
+let g:netrw_liststyle=3 " Use tree style directory listing
 
 hi! link netrwMarkFile Search

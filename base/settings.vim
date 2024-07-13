@@ -1,4 +1,7 @@
-" VIMod Settings
+" VIMod settings
+
+" Disable compatibility with vi which can cause unexpected issues
+set nocompatible
 
 " Enable syntax highlighting
 syntax on
@@ -12,8 +15,14 @@ set cursorline
 " Show line numbers
 set number
 
+" Show relative line numbers
+set relativenumber
+
 " Set the width of the line numbers
 set numberwidth=6
+
+" Show a vertical line at the 80th column
+set colorcolumn=120
 
 " Show matching brackets when the cursor is over one
 set showmatch
@@ -24,13 +33,14 @@ set showcmd
 " Always keep one line around the cursor
 set scrolloff=1
 
+" Always keep five columns around the cursor
+set sidescrolloff=5
+
 " Let Vim set the title of the terminal
 set title
 
-" Enable terminal colors if supported by Vim (not the terminal)
-if has("termguicolors")
-	set termguicolors
-endif
+" Sets how many lines of history VIM has to remember
+set history=1000
 
 " Split windows to the right by default (because we have more horizontal space)
 set splitright
@@ -40,6 +50,13 @@ set noshowmode
 
 " Use the command line completion menu
 set wildmenu
+set wildmode=longest,full
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+	set wildignore+=.git\*,.hg\*,.svn\*
+else
+	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
 
 " Configure auto completion menu to show immediately without inserting or selecting automatically
 set completeopt=menuone,preview,popup,noinsert,noselect
@@ -85,9 +102,56 @@ set tabstop=4
 " Set the number of spaces to use for auto-indentation for consistency
 set shiftwidth=4
 
+" Enable auto-indentation and smart indentation for code
+set autoindent
+set smartindent
+
+" When shifting lines, round the indentation to the nearest multiple of "shiftwidth.
+set shiftround
+
+" Set fold method to indent
+set foldmethod=indent
+
+" Disable folding by default
+set nofoldenable
+
 " Allow the cursor to go one character past the end of the line
 set virtualedit+=block,onemore
 
-" Show whitespaces
-set listchars=tab:\¦\ ,nbsp:·,trail:·
+" Make backspace behave like most other text editors
+set backspace=eol,start,indent
+
+" Allow cursor to wrap
+set whichwrap=b,s,h,l,<,>,[,]
+
+" Show some whitespaces
 set list
+set listchars=trail:·,nbsp:·,extends:>,precedes:<,tab:\ \ ",tab:\┊\ ,multispace:\┊\ ,space:·
+"match LineNr /\t\|\s\{2,}/
+"autocmd WinNew * match LineNr /\t\|\s\{2,}/
+
+" Set utf8 as standard encoding
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" Disable backup files and swap files
+set nobackup
+set nowb
+set noswapfile
+
+" Don't redraw while executing macros
+set lazyredraw
+
+" Always try to show a paragraph's last line.
+set display+=lastline
+
+" Avoid wrapping a line in the middle of a word
+set linebreak
+
+" No line wrapping
+set nowrap
+
+" Ask for confirmation when closing an unsaved buffer
+set confirm

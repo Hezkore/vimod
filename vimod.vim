@@ -13,6 +13,7 @@ runtime vimod/base/tabline.vim
 runtime vimod/base/netrw.vim
 runtime vimod/base/keymap.vim
 runtime vimod/base/commands.vim
+runtime vimod/base/languages.vim
 
 " Read the starting directory from the start_dir file
 let g:start_dir_file = g:vimfiles . '/.startdir'

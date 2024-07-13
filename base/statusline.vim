@@ -77,8 +77,9 @@ endfunction
 
 " Function for setting the general information in the statusline
 function! StatusLineInfo()
-	let s:statuslineinfo = '%( %{&fileencoding?&fileencoding:&encoding}%)'
-	let s:statuslineinfo .= '[%{&fileformat}] '
+	let s:statuslineinfo = '%( %<%{&expandtab?"Spaces":"Tabs"}[%{&tabstop}]%)'
+	let s:statuslineinfo .= '%( %{&fileencoding?&fileencoding:&encoding}%)'
+	let s:statuslineinfo .= '%([%{&fileformat}] %)'
 	
 	return s:statuslineinfo
 endfunction
