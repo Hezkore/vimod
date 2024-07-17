@@ -45,6 +45,9 @@ function! VIModExtendedKeys()
 	nnoremap <silent> <C-k> :bnext!<CR>
 	
 	" ctrl space to show autocomplete and signature help
-	inoremap <C-Space> <C-\><C-O>:LspShowSignature<CR><C-x><C-o>
+	inoremap <C-Space> <C-\><C-O>:silent! LspShowSignature<CR><C-x><C-o>
+	
+	" make tab accept wildmenu item
+	inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
 endfunction
 command! VIModKeys call VIModExtendedKeys()

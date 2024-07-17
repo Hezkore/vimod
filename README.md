@@ -1,5 +1,5 @@
 # VIMod⚡
-VIMod _(VIM + Vemod)_ is my personal Vim configuration.
+VIMod _(VIM + Vemod)_ is my personal [Vim](https://github.com/vim/vim) configuration.
 
 The core idea is to keep the complexity buried in the configuration, and out of the user's workflow and initial setup.
 
@@ -43,9 +43,13 @@ Changes are auto-applied upon saving the vimrc file, and can also be manually ap
 
 Restarting Vim is advised to ensure all settings are applied.
 
+All settings can be set after the VIMod runtime is loaded, however, to be efficient, the following settings can be set before the runtime is loaded.
+* `mapleader`
+* `colorscheme`
+
 ### Leader Key
-<kbd>Space</kbd> is the leader key for VIMod.\
-Add `let mapleader = ","` in `:Settings` if you prefer <kbd>,</kbd> as the leader key.
+VIMod uses <kbd>Space</kbd> as the leader key.\
+Add `let mapleader = ","` before the VIMod runtime in `:Settings` if you prefer <kbd>,</kbd> as the leader key.
 
 ### Keymaps
 <kbd>Leader</kbd> + <kbd>h</kbd> or <kbd>Leader</kbd> + <kbd>j</kbd> moves jumps to the previous buffer.\
@@ -66,7 +70,8 @@ You can also enable them temporarily with `:VIModExtendedKeys`.
 <kbd>Ctrl</kbd> + <kbd>h</kbd> or <kbd>Ctrl</kbd> + <kbd>j</kbd> moves jumps to the previous buffer.\
 <kbd>Ctrl</kbd> + <kbd>l</kbd> or <kbd>Ctrl</kbd> + <kbd>k</kbd> moves jumps to the next buffer.
 
-<kbd>Ctrl</kbd> + <kbd>Space</kbd>  to show auto-complete and signature help.
+<kbd>Ctrl</kbd> + <kbd>Space</kbd>  to show auto-complete and signature help.\
+<kbd>Tab</kbd> accepts the auto-complete suggestion.
 
 ## Plugins
 While VIMod strives to keep plugin use to a minimum, some features are best handled by well-maintained and regularly updated plugins.
