@@ -1,0 +1,10 @@
+" Vim LSC - Language Server Protocol support
+Plug 'natebosch/vim-lsc'
+
+" Settings that can be set before the plugin is loaded
+let g:lsc_server_commands = {'go': 'gopls'}
+
+" Settings that need to be applied after the plugin is loaded
+autocmd User VIModPlugSettings call s:plugin_settings()
+function! s:plugin_settings()
+endfunction

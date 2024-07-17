@@ -2,7 +2,6 @@
 Plug 'dracula/vim', { 'as': 'dracula' }
 
 " Settings that can be set before the plugin is loaded
-
 let g:dracula_high_contrast_diff = 1 " Use high contrast diff colors
 let g:dracula_italic = 1 " Pray that the users terminal supports italics
 set background=dark " Set the background to dark

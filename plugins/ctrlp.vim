@@ -8,10 +8,10 @@ let g:ctrlp_custom_ignore = {
 \}
 let g:ctrlp_working_path_mode = 'r'
 
+" Bind leader b to Ctrl-P buffer list
+nmap <silent> <leader>b :CtrlPBuffer<cr>
+	
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()
-	"echomsg "Applying Ctrl-P bindings"
-	" Optional mapping
-	nmap <leader>p :CtrlP<cr>
 endfunction

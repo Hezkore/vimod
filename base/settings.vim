@@ -6,6 +6,10 @@ set nocompatible
 " Enable syntax highlighting
 syntax on
 
+" Set Vim language to English
+let $LANG = 'en'
+set langmenu=en_US.UTF-8
+
 " Enable filetype detection, plugins, and indentation
 filetype plugin indent on
 
@@ -42,6 +46,23 @@ set title
 " Sets how many lines of history VIM has to remember
 set history=1000
 
+"  Maximum number of changes that can be reverted in the current buffer
+set undolevels=1000
+
+" Maximum number lines to save for undo
+set undoreload=10000
+
+" Persistent undo
+try
+	let undo_dir = g:vimfiles . "/undo"
+	if !isdirectory(undo_dir)
+		call mkdir(undo_dir, "p")
+	endif
+	let &undodir = undo_dir
+	set undofile
+catch
+endtry
+
 " Split windows to the right by default (because we have more horizontal space)
 set splitright
 
@@ -51,6 +72,7 @@ set noshowmode
 " Use the command line completion menu
 set wildmenu
 set wildmode=longest,full
+set wildoptions=pum
 set wildignore=*.o,*~,*.pyc
 if has("win16") || has("win32")
 	set wildignore+=.git\*,.hg\*,.svn\*
@@ -58,8 +80,11 @@ else
 	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
+" Omni completion settings
+set omnifunc=syntaxcomplete#Complete
+
 " Configure auto completion menu to show immediately without inserting or selecting automatically
-set completeopt=menuone,preview,popup,noinsert,noselect
+set completeopt=menu,menuone,noinsert,noselect,preview
 
 " Allow hidden buffers to enable switching without saving
 set hidden
@@ -101,6 +126,7 @@ set shiftwidth=4
 
 " Enable auto-indentation and smart indentation for code
 set autoindent
+set copyindent
 set smartindent
 
 " When shifting lines, round the indentation to the nearest multiple of "shiftwidth.
@@ -144,7 +170,7 @@ set noswapfile
 " Don't redraw while executing macros
 set lazyredraw
 
-" Always try to show a paragraph's last line.
+" Always try to show a paragraph's last line
 set display+=lastline
 
 " Avoid wrapping a line in the middle of a word
@@ -156,5 +182,35 @@ set nowrap
 " Ask for confirmation when closing an unsaved buffer
 set confirm
 
-" Return to last edit position when opening files
+" Change selected letters when write
+set selectmode=mouse,key
+
+" Select with SHIFT + ARROW for Vim-noobs
+set keymodel=startsel,stopsel
+
+" Enable select with mouse in insert mode
+set selection=exclusive
+
+" Can move cursor past end of line, where there are no characters, in visualblock mode
+set virtualedit=block
+
+" Visual selection automatically copied to clipboard
+set go+=a
+
+" make terminal refreshing fast, instead refresh character for character
+set ttyfast
+
+" Prefer redraw to scrolling for more than 3 lines, prevent glitches when you're scrolling
+set ttyscroll=3
+
+" Start diff mode with vertical splits
+set diffopt=vertical
+
+" Hide mouse when typing
+set mousehide
+
+" Always show the signcolumn
+set signcolumn=number
+
+" Restore cursor to last position in file when reopened
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
