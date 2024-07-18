@@ -45,7 +45,7 @@ Restarting Vim is advised to ensure all settings are applied.
 
 All settings can be set after the VIMod runtime is loaded, however, to be efficient, the following settings can be set before the runtime is loaded.
 * `mapleader`
-* `colorscheme`
+* `colorscheme` _(note that `set termguicolors` is also not set if a colorscheme is set before the runtime)_
 
 ### Leader Key
 VIMod uses <kbd>Space</kbd> as the leader key.\

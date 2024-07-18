@@ -80,6 +80,12 @@ let lspServers = [#{
 \	path: expand('~\.nimble\bin\nimlsp'),
 \	args: [''],
 \	syncInit: v:true
+\ },#{
+\	name: 'Odin',
+\	filetype: ['odin'],
+\	path: 'ols',
+\	args: [''],
+\	syncInit: v:true
 \ }]
 autocmd User LspSetup call LspAddServer(lspServers)
 
