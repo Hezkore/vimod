@@ -5,9 +5,8 @@ if g:enabled_copilot
 endif
 
 " Settings that can be set before the plugin is loaded
-"imap <M-§> <Plug>(copilot-suggest)
-"imap <NL> <Cmd>Copilot panel<CR>
-"map <leader>p <Cmd>Copilot panel<CR>
+" Disable automatic Copilot completion, use Ctr+x Ctrl+c to trigger it instead
+let g:copilot_enabled = 0
 
 function! ToggleCopilot()
 	if copilot#Enabled()
@@ -20,6 +19,11 @@ function! ToggleCopilot()
 			execute 'Copilot setup'
 		endif
 	endif
+endfunction
+
+function! TriggerCopilotSuggestion()
+    echo "Asking Copilot for a suggestion..."
+    execute "call copilot#Suggest()"
 endfunction
 
 " Settings that need to be applied after the plugin is loaded

@@ -1,5 +1,5 @@
 " LSP - Language Server Protocol support
-let g:enabled_lsp = get(g:, 'enabled_lsp', 1)
+let g:enabled_lsp = get(g:, 'enabled_lsp', 0)
 if g:enabled_lsp
 	" Main LSP runner
 	Plug 'prabirshrestha/vim-lsp'
@@ -70,16 +70,16 @@ let g:lsp_diagnostics_virtual_text_prefix = ' <- '
 "let g:lsp_text_edit_enabled = 0
 "let g:lsp_document_highlight_enabled = 0
 "let g:lsp_document_highlight_delay = 0
-"let g:lsp_preview_float = 0
-"let g:lsp_preview_autoclose = 0
-"let g:lsp_preview_doubletap = 0
+let g:lsp_preview_float = 1
+let g:lsp_preview_autoclose = 0
+let g:lsp_preview_doubletap = [function('lsp#ui#vim#output#focuspreview')]
 "let g:lsp_preview_fixup_conceal = 0
 let g:lsp_peek_alignment = 'center'
 "let g:lsp_preview_max_width = 0
 "let g:lsp_preview_max_height = 0
 "let g:lsp_float_max_width = 0
-"let g:lsp_signature_help_enabled = 0
-"let g:lsp_signature_help_delay = 0
+let g:lsp_signature_help_enabled = 1
+let g:lsp_signature_help_delay = 250
 "let g:lsp_show_workspace_edits = 0
 "let g:lsp_fold_enabled = 0
 "let g:lsp_hover_conceal = 0
@@ -172,7 +172,7 @@ function! s:plugin_settings()
 		
 		" Close completion menu when completion is done
 		autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-		
+			
 		" refer to doc to add more commands
 	endfunction
 	

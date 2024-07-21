@@ -81,7 +81,7 @@ To go to the next buffer, use <kbd>Leader</kbd> followed by either <kbd>l</kbd> 
 <kbd>Leader</kbd>+<kbd>o</kbd> opens or focuses the file explorer.\
 <kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>d</kbd> changes the directory to the current buffer's directory.
 
-<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>p</kbd> opens the Copilot suggestions panel.
+<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>p</kbd> opens the GitHub Copilot suggestions panel.
 
 ### Extended keymaps
 Because VIMod is designed to be as unobtrusive as possible, the extended keymaps are disabled by default.\
@@ -93,9 +93,11 @@ If your terminal supports it, <kbd>Ctrl</kbd>+<kbd>Tab</kbd> and <kbd>Ctrl</kbd>
 
 <kbd>Ctrl</kbd>+<kbd>p</kbd> opens fuzzy file finder.
 
-<kbd>Ctrl</kbd>+<kbd>Space</kbd> shows auto-complete and signature help.\
-<kbd>Enter</kbd> no longer accepts the auto-complete suggestion.\
-<kbd>Tab</kbd> accepts the auto-complete suggestion.\
+<kbd>insert</kbd> | <kbd>Ctrl</kbd>+<kbd>x</kbd>+<kbd>Ctrl</kbd>+<kbd>g</kbd> triggers a GitHub Copilot suggestion.
+
+<kbd>insert</kbd> | <kbd>Ctrl</kbd>+<kbd>Space</kbd> shows auto-complete and signature help.\
+<kbd>insert</kbd> | <kbd>Enter</kbd> no longer accepts the auto-complete suggestion.\
+<kbd>insert</kbd> | <kbd>Tab</kbd> accepts the auto-complete suggestion.\
 <kbd>K</kbd> is replaced with the [LSP](#lsp) context menu.
 
 ### LSP
@@ -108,26 +110,31 @@ LSP servers can be automatically installed, and you will be prompted when a serv
 LSP options can be found in the quick menu under the `LSP` section.\
 You can also install and manage LSP servers using the quick menu.
 
-Auto-completion is enabled by default and can be disabled with `let g:asyncomplete_auto_popup = 0`, and manually triggered with <kbd>Ctrl</kbd>+<kbd>Space</kbd> when using the extended keys.\
-You can also use <kbd>K</kbd> to open the LSP context menu.
+Can be completely disabled with `let g:enabled_lsp = 0` in your vimrc file.
 
-If you want to use any command directly, you can use the following:
+Auto-completion is enabled by default.\
+Can be completely disabled with `let g:asyncomplete_auto_popup = 0` in your vimrc file.\
+With the extended keys, use <kbd>Ctrl</kbd>+<kbd>Space</kbd> to manually trigger auto-complete, and  <kbd>Tab</kbd> to accept the suggestion.\
+Use <kbd>K</kbd> to open the LSP context menu on a symbol.
+
+If you want to use any commands directly, you can use the following:
 * `:LspInstallServer` - Install an LSP server for the current filetype.
 * `:LspManageServers` - Manage all LSP servers.
 * `:LspUninstallServer <lsp name>` - Uninstall the specified LSP server.
 
-Can be completely disabled with `let g:enabled_lsp = 0` in your vimrc file.
-
 Snippets are also provided for various languages and will be displayed in the auto-complete suggestions.\
-With the extended keys, use <kbd>Tab</kbd> to first accept the snippet, and then <kbd>Tab</kbd> again to jump to the next snippet placeholder.
+With the extended keys, use <kbd>Tab</kbd> to accept the snippet, and then <kbd>Tab</kbd> again to jump to the next snippet placeholder.
 
 Can be completely disabled with `let g:enabled_snippets = 0` in your vimrc file.
 
-### Copilot
+### GitHub Copilot
 Copilot is a GitHub AI-powered code completion tool.\
 It runs independently from the LSP, but can still be used in conjunction with it.
 
 Copilot requires an active [GitHub Copilot subscription](https://github.com/features/copilot/plans) to work.
+
+Open the Copilot suggestions panel with <kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>p</kbd>.\
+And with the extended keys, use <kbd>Ctrl</kbd>+<kbd>x</kbd>+<kbd>Ctrl</kbd>+<kbd>g</kbd> to trigger a suggestion in insert mode.
 
 Can be completely disabled with `let g:enabled_copilot = 0` in your vimrc file.
 

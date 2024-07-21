@@ -34,7 +34,7 @@ nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Leader cp to open Copilot panel
 if exists('g:enabled_copilot')
-	nnoremap <silent> <leader>cp :Copilot panel<CR>
+	nnoremap <silent> <leader>cp <cmd>Copilot panel<CR>
 endif
 
 if exists('g:enabled_ctrlp')
@@ -61,6 +61,10 @@ function! VIModExtendedKeys()
 	" Tab to select the current popup menu item
 	inoremap <expr> <tab> pumvisible() ? "\<C-y>" : "\<Tab>"
 	
+	if exists('g:enabled_copilot')
+		inoremap <C-x><C-g> <cmd>call TriggerCopilotSuggestion()<CR>
+	endif
+	
 	if exists('g:enabled_lsp')
 		"nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
 		"nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
@@ -79,9 +83,7 @@ function! VIModExtendedKeys()
 	
 	" Ctrl p to open CtrlP
 	if exists('g:enabled_ctrlp')
-		"let g:ctrlp_map = '<c-p>'
 		nnoremap <silent> <C-p> :CtrlP .<CR>
-		
 	endif
 endfunction
 command! VIModKeys call VIModExtendedKeys()
