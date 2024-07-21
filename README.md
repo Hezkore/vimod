@@ -5,6 +5,8 @@ The core idea is to keep the complexity buried in the configuration, and out of 
 
 VIMod is designed to complement any existing Vim setup, adding features without complicating the workflow. To integrate VIMod, simply include the VIMod runtime in your existing vimrc file. If you ever decide to remove VIMod, your Vim setup will revert to its previous state.
 
+![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
+
 ## Philosophy
 * Prioritize Vim's built-in features and native functionality to minimize usage of external plugins.
 * Design each component to be self-contained, with both setup and configuration in its own .vim file.
