@@ -75,7 +75,7 @@ Importantly, these activations are not case-sensitive. This means pressing <kbd>
 
 <kbd>Leader</kbd> + <kbd>p</kbd> opens the fuzzy file finder.
 
-<kbd>Leader</kbd> + <kbd>cp</kbd> opens the GitHub Copilot menu.
+<kbd>Leader</kbd> + <kbd>cp</kbd> opens the GitHub Copilot suggestions panel.
 
 <kbd>Leader</kbd> + <kbd>o</kbd> opens the file explorer.\
 <kbd>Leader</kbd> + <kbd>cd</kbd> changes the current directory to the file's directory.
