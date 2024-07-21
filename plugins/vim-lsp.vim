@@ -1,17 +1,23 @@
 " LSP - Language Server Protocol support
-" Main LSP runner
-Plug 'prabirshrestha/vim-lsp'
-" Automatic installation of LSP servers
-Plug 'mattn/vim-lsp-settings'
-" Completion while typing
-Plug 'prabirshrestha/asyncomplete.vim'
-" Fill completion menu with LSP completions
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
+let g:enabled_lsp = get(g:, 'enabled_lsp', 1)
+if g:enabled_lsp
+	" Main LSP runner
+	Plug 'prabirshrestha/vim-lsp'
+	" Automatic installation of LSP servers
+	Plug 'mattn/vim-lsp-settings'
+	" Completion while typing
+	Plug 'prabirshrestha/asyncomplete.vim'
+	" Fill completion menu with LSP completions
+	Plug 'prabirshrestha/asyncomplete-lsp.vim'
+endif
 
 " Settings that can be set before the plugin is loaded
-let g:enabled_lsp = 1
-
 let g:lsp_diagnostics_enabled = 1
+
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_popup_delay = 500
+let g:asyncomplete_min_chars = 0
+let g:asyncomplete_auto_completeopt = 0
 
 " Do nothing while in insert mode
 let g:lsp_diagnostics_signs_insert_mode_enabled = 0
@@ -139,7 +145,7 @@ endfunction
 "		LspInstallServer
 "	endif
 "endfunction
-	
+
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()

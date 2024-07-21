@@ -84,7 +84,7 @@ endif
 set omnifunc=syntaxcomplete#Complete
 
 " Configure auto completion menu to show immediately without inserting or selecting automatically
-set completeopt=menu,menuone,noinsert,noselect,preview
+set completeopt=menu,menuone,noinsert",preview,noselect
 
 " Allow hidden buffers to enable switching without saving
 set hidden
@@ -211,6 +211,10 @@ set mousehide
 
 " Always show the signcolumn
 set signcolumn=yes
+
+" Options for restoring sessions
+set sessionoptions-=options
+set sessionoptions+=winpos,resize
 
 " Restore cursor to last position in file when reopened
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

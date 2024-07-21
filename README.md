@@ -50,46 +50,51 @@ Restarting Vim is advised to ensure all settings are applied.
 All settings can be set after the VIMod runtime is loaded, however, to be efficient, the following settings should be set before the runtime is loaded.
 * `mapleader`
 * `colorscheme` _(note that `set termguicolors` is also not set if a colorscheme is set before the runtime)_
+* `let g:enabled_<plugin> = 0`
 
 ### Leader Key
 VIMod uses <kbd>,</kbd> as the leader key.\
-While the leader key can be changed, it is recommended to not use <kbd>Space</kbd>, as the [quick menu](#quick-menu) uses it.
+You can change the key with, for example, `let mapleader = "§"` in your vimrc file.\
+
+It is <u>not</u> recommended to use <kbd>Space</kbd>, as the [quick menu](#quick-menu) uses it.
 
 ### Quick Menu
 The quick menu, accessible by pressing <kbd>Space</kbd>, appears as a menu bar at the top of the Vim window.\
-It functions similarly to a leader key but provides a visual guide to the available commands.
+It functions similarly to a leader key, but provides a visual guide to the available commands.
 
 Each menu item displays a highlighted letter, the key to press to activate that command.\
-Importantly, these activations are not case-sensitive. This means pressing <kbd>Space</kbd> + <kbd>b</kbd> has the same effect as <kbd>Space</kbd> + <kbd>B</kbd>.
+Importantly, these activations are not case-sensitive. And you should always press the lower-case letter.
 
 ### Keymaps
-<kbd>Space</kbd> access the quick menu.
+<kbd>Space</kbd> opens the quick menu.
 
-<kbd>Leader</kbd> + <kbd>h</kbd> or <kbd>Leader</kbd> + <kbd>j</kbd> moves jumps to the previous buffer.\
-<kbd>Leader</kbd> + <kbd>l</kbd> or <kbd>Leader</kbd> + <kbd>k</kbd> moves jumps to the next buffer.\
-<kbd>Leader</kbd> + <kbd>1</kbd> to <kbd>9</kbd> jumps to the corresponding buffer.\
-<kbd>Leader</kbd> + <kbd>q</kbd> closes the current buffer.\
-<kbd>Leader</kbd> + <kbd>n</kbd> creates a new buffer.\
-<kbd>Leader</kbd> + <kbd>lb</kbd> lists and lets you pick a buffer to jump to.\
-<kbd>#nr</kbd> + <kbd>Leader</kbd> + <kbd>gb</kbd> jumps to the buffer with the corresponding number.
+To go to the previous buffer, use <kbd>Leader</kbd> followed by either <kbd>h</kbd> or <kbd>j</kbd> or <kbd>g</kbd>+<kbd>b</kbd>\
+To go to the next buffer, use <kbd>Leader</kbd> followed by either <kbd>l</kbd> or <kbd>k</kbd> or <kbd>g</kbd>+<kbd>B</kbd>\
+<kbd>Leader</kbd>+<kbd>n</kbd> creates a new buffer.\
+<kbd>Leader</kbd>+<kbd>q</kbd> closes the current buffer.\
+<kbd>Leader</kbd>+<kbd>t</kbd> opens the last closed buffer.\
+<kbd>#nr</kbd>+<kbd>Leader</kbd>+<kbd>g</kbd>+<kbd>b</kbd> jumps to the buffer with the corresponding number.\
+<kbd>Leader</kbd>+<kbd>b</kbd> opens the fuzzy buffer finder.
 
-<kbd>Leader</kbd> + <kbd>p</kbd> opens the fuzzy file finder.
+<kbd>Leader</kbd>+<kbd>p</kbd> opens the fuzzy file finder.
 
-<kbd>Leader</kbd> + <kbd>cp</kbd> opens the GitHub Copilot suggestions panel.
+<kbd>Leader</kbd>+<kbd>o</kbd> opens or focuses the file explorer.\
+<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>d</kbd> changes the directory to the current buffer's directory.
 
-<kbd>Leader</kbd> + <kbd>o</kbd> opens the file explorer.\
-<kbd>Leader</kbd> + <kbd>cd</kbd> changes the current directory to the file's directory.
+<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>p</kbd> opens the Copilot suggestions panel.
 
 ### Extended keymaps
 Because VIMod is designed to be as unobtrusive as possible, the extended keymaps are disabled by default.\
 To enable them, add `VIModKeys` to your vimrc file, or enable them temporarily with `:VIModKeys`.
 
-<kbd>Ctrl</kbd> + <kbd>h</kbd> or <kbd>Ctrl</kbd> + <kbd>j</kbd> moves jumps to the previous buffer.\
-<kbd>Ctrl</kbd> + <kbd>l</kbd> or <kbd>Ctrl</kbd> + <kbd>k</kbd> moves jumps to the next buffer.
+<kbd>Ctrl</kbd>+<kbd>h</kbd> moves to the previous buffer.\
+<kbd>Ctrl</kbd>+<kbd>l</kbd> moves to the next buffer.\
+If your terminal supports it, <kbd>Ctrl</kbd>+<kbd>Tab</kbd> and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd> can also be used.
 
-<kbd>Ctrl</kbd> + <kbd>p</kbd> opens fuzzy file finder.
+<kbd>Ctrl</kbd>+<kbd>p</kbd> opens fuzzy file finder.
 
-<kbd>Ctrl</kbd> + <kbd>Space</kbd>  to show auto-complete and signature help.\
+<kbd>Ctrl</kbd>+<kbd>Space</kbd> shows auto-complete and signature help.\
+<kbd>Enter</kbd> no longer accepts the auto-complete suggestion.\
 <kbd>Tab</kbd> accepts the auto-complete suggestion.\
 <kbd>K</kbd> is replaced with the [LSP](#lsp) context menu.
 
@@ -103,24 +108,49 @@ LSP servers can be automatically installed, and you will be prompted when a serv
 LSP options can be found in the quick menu under the `LSP` section.\
 You can also install and manage LSP servers using the quick menu.
 
-However, If you want to use the commands directly, you can use the following commands:
+Auto-completion is enabled by default and can be disabled with `let g:asyncomplete_auto_popup = 0`, and manually triggered with <kbd>Ctrl</kbd>+<kbd>Space</kbd> when using the extended keys.\
+You can also use <kbd>K</kbd> to open the LSP context menu.
+
+If you want to use any command directly, you can use the following:
 * `:LspInstallServer` - Install an LSP server for the current filetype.
 * `:LspManageServers` - Manage all LSP servers.
 * `:LspUninstallServer <lsp name>` - Uninstall the specified LSP server.
+
+Can be completely disabled with `let g:enabled_lsp = 0` in your vimrc file.
+
+Snippets are also provided for various languages and will be displayed in the auto-complete suggestions.\
+With the extended keys, use <kbd>Tab</kbd> to first accept the snippet, and then <kbd>Tab</kbd> again to jump to the next snippet placeholder.
+
+Can be completely disabled with `let g:enabled_snippets = 0` in your vimrc file.
+
+### Copilot
+Copilot is a GitHub AI-powered code completion tool.\
+It runs independently from the LSP, but can still be used in conjunction with it.
+
+Copilot requires an active [GitHub Copilot subscription](https://github.com/features/copilot/plans) to work.
+
+Can be completely disabled with `let g:enabled_copilot = 0` in your vimrc file.
 
 ## Plugins
 While VIMod strives to keep plugin use to a minimum, some features are best handled by well-maintained and regularly updated plugins.
 
 The following plugins are included and installed automatically with VIMod:
 * [vim-plug](https://github.com/junegunn/vim-plug) - Plugin manager
+* [CtrlP](https://github.com/ctrlpvim/ctrlp.vim) - Fuzzy finder
 * [Dracula](https://github.com/dracula/vim) - Dracula dark theme
 * [Surrround](https://github.com/tpope/vim-surround) - Modify surroundings
-* [CtrlP](https://github.com/ctrlpvim/ctrlp.vim) - Fuzzy finder
 * [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot integration
+
+LSP plugins:
 * [Vim-LSP](https://github.com/prabirshrestha/vim-lsp) - Language Server Protocol client
 * [LSP Settings](https://github.com/mattn/vim-lsp-settings) - Automatic installation and settings of LSP servers
 * [Asyncomplete](https://github.com/prabirshrestha/asyncomplete.vim) - Asynchronous completion while typing
 * [Asyncomplete-LSP](prabirshrestha/asyncomplete-lsp.vim) - Asynchronous completion LSP integration
+
+Snippets plugins:
+* [Vim-Snip]() - Snippets engine
+* [Vim-Snip-Integration]() - Snippets LSP integration
+* [Friendly-Snippets]() - Snippets for various languages
 
 ### Adding plugins
 Every VIMod plugin is self-contained in its own file

@@ -1,10 +1,13 @@
 " LSP - Language Server Protocol support
-" Snippet support
-Plug 'hrsh7th/vim-vsnip'
-" LSP integration
-Plug 'hrsh7th/vim-vsnip-integ'
-" Snippet library
-Plug 'rafamadriz/friendly-snippets'
+let g:enabled_snippets = get(g:, 'enabled_snippets', 1)
+if g:enabled_snippets
+	" Snippet support
+	Plug 'hrsh7th/vim-vsnip'
+	" LSP integration
+	Plug 'hrsh7th/vim-vsnip-integ'
+	" Snippet library
+	Plug 'rafamadriz/friendly-snippets'
+endif
 
 " Settings that can be set before the plugin is loaded
 

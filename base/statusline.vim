@@ -80,13 +80,13 @@ function! StatusLineInfo()
 	let s:statuslineinfo = '%( %<%{&expandtab?"Spaces":"Tabs"}[%{&tabstop}]%)'
 	let s:statuslineinfo .= '%( %{&fileencoding?&fileencoding:&encoding}%)'
 	let s:statuslineinfo .= '%([%{&fileformat}] %)'
-	if exists('g:enabled_lsp')
+	if exists('g:enabled_lsp') && g:enabled_lsp == 1
 		try
 			let s:statuslineinfo .= '%(%{&modifiable==1? (LspRunningForBuffer()==1? "LSP[".LspStatusInfo()."]":"LSP[off]") : ""} %)'
 		catch
 		endtry
 	endif
-	if exists('g:enabled_copilot')
+	if exists('g:enabled_copilot') && g:enabled_copilot == 1
 		try
 			let s:statuslineinfo .= '%(%{&readonly==0? (copilot#Enabled()==1? "Copilot[on]":"Copilot[off]") : ""} %)'
 		catch

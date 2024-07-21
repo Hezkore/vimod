@@ -1,8 +1,10 @@
 " Copilot - GitHub Copilot
-Plug 'github/copilot.vim'
+let g:enabled_copilot = get(g:, 'enabled_copilot', 1)
+if g:enabled_copilot
+	Plug 'github/copilot.vim'
+endif
 
 " Settings that can be set before the plugin is loaded
-let g:enabled_copilot = 1
 "imap <M-§> <Plug>(copilot-suggest)
 "imap <NL> <Cmd>Copilot panel<CR>
 "map <leader>p <Cmd>Copilot panel<CR>

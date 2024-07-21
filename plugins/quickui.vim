@@ -91,8 +91,8 @@ function! s:plugin_settings()
 	\ ])
 	
 	" Copilot menu
-	if exists('g:enabled_copilot')
-		call quickui#menu#install('Co&pilot', [
+	if exists('g:enabled_copilot') && g:enabled_copilot == 1
+		call quickui#menu#install('&Copilot', [
 			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
 			\ ["--", ''],
 			\ ["Show Suggestion &Panel\t%{LeaderKey()}+cp", 'Copilot panel'],
@@ -100,7 +100,7 @@ function! s:plugin_settings()
 	endif
 	
 	" If the LSP server is installed, add the LSP menu
-	if exists('g:enabled_lsp')
+	if exists('g:enabled_lsp') && g:enabled_lsp == 1
 		" LSP quick menu
 		call quickui#menu#install('&LSP', [
 			\ ["&Format Document", 'LspDocumentFormat', "Format the entire document"],
