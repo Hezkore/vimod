@@ -71,6 +71,7 @@ function! VIModExtendedKeys()
 		
 		" Enter no longer selects current popup menu item
 		inoremap <expr> <cr> pumvisible() ? asyncomplete#cancel_popup() . "\<cr>" : "\<cr>"
+		inoremap <expr> <C-j> pumvisible() ? asyncomplete#cancel_popup() . "\<cr>" : "\<cr>"
 		
 		" Ctrl Space to show autocomplete and signature help
 		inoremap <silent> <C-Space> <C-\><C-O>:LspSignatureHelp<CR><Plug>(asyncomplete_force_refresh)
