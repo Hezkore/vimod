@@ -76,7 +76,7 @@ let g:lsp_peek_alignment = 'center'
 "let g:lsp_signature_help_delay = 0
 "let g:lsp_show_workspace_edits = 0
 "let g:lsp_fold_enabled = 0
-"let g:lsp_hover_conceal =
+"let g:lsp_hover_conceal = 0
 "let g:lsp_hover_ui = 0
 "let g:lsp_ignorecase = 0
 "let g:lsp_semantic_enabled = 0
@@ -86,7 +86,7 @@ let g:lsp_peek_alignment = 'center'
 "let g:lsp_tagfunc_source_methods = 0
 "let g:lsp_show_message_request_enabled = 0
 "let g:lsp_show_message_log_level = 0
-"let g:lsp_work_done_progress_enabled = 0
+let g:lsp_work_done_progress_enabled = 0
 "let g:lsp_untitled_buffer_enabled = 0
 "let g:lsp_inlay_hints_delay = 0
 "let g:lsp_code_action_ui = 0
@@ -169,4 +169,14 @@ function! s:plugin_settings()
 		
 		" refer to doc to add more commands
 	endfunction
+	
+	"function! s:on_textDocumentDiagnostics(x) abort
+	"	echom 'Diagnostics for ' . a:x['server'] . ' ' . json_encode(a:x['response'])
+	"endfunction
+	"
+	"au User lsp_setup call lsp#callbag#pipe(
+	"	\ lsp#stream(),
+	"	\ lsp#callbag#filter({x-> has_key(x, 'response') && !has_key(x['response'], 'error') && get(x['response'], 'method', '') == 'textDocument/publishDiagnostics'}),
+	"	\ lsp#callbag#subscribe({ 'next':{x->s:on_textDocumentDiagnostics(x)} }),
+	"\ )
 endfunction

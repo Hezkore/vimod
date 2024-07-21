@@ -66,7 +66,7 @@ endfunction
 " Function for setting the file information in the statusline
 function! StatusLineFile()
 	let s:statuslinefile = '%(%w %)'
-	let s:statuslinefile .= '%t'
+	let s:statuslinefile .= '%t%<'
 	let s:statuslinefile .= '%m'
 	let s:statuslinefile .= '%( %{&readonly?"⊝":""}%)'
 	let s:statuslinefile .= '%='
