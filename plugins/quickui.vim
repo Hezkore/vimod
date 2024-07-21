@@ -44,7 +44,7 @@ function! s:plugin_settings()
 		\ [ "Next\t%{LeaderKey()}+l\\%{LeaderKey()}+k", 'bnext' ],
 		\ [ "Previous\t%{LeaderKey()}+h\\%{LeaderKey()}+j", 'bprevious' ],
 		\ [ "--", '' ],
-		\ [ "&List All Buffers\t%{LeaderKey()}+bl", 'CtrlPBuffer' ],
+		\ [ "&List All Buffers\t%{LeaderKey()}+lb", 'CtrlPBuffer' ],
 		\ [ "--", '' ],
 		\ [ "Save All", 'wa' ],
 		\ [ "Close All", 'qa' ],
@@ -84,7 +84,7 @@ function! s:plugin_settings()
 		call quickui#menu#install('Co&pilot', [
 			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
 			\ ["--", ''],
-			\ ["Show Suggestion &Panel", 'Copilot panel'],
+			\ ["Show Suggestion &Panel\t%{LeaderKey()}+cp", 'Copilot panel'],
 		\ ])
 	endif
 	
