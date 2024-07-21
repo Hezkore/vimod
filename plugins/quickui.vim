@@ -77,7 +77,18 @@ function! s:plugin_settings()
 		\ [ "--", '' ],
 		\ [ "Change &Directory\t%{LeaderKey()}+cd", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
 	\ ])
-		
+	
+	" Spelling menu
+	call quickui#menu#install('&Spelling', [
+		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
+	\ ])
+	
+	" Terminal menu
+	call quickui#menu#install('&Terminal', [
+		\ [ "New &Terminal", 'bot terminal ++rows=15', "Open a new terminal" ],
+		\ [ "New Terminal &Persistent", 'bot terminal ++rows=15 ++noclose', "Open a new terminal that becomes an editable buffer" ],
+		\ [ "Make &Window Terminal", 'terminal ++curwin', "Convert the current window into a terminal" ],
+	\ ])
 	
 	" Copilot menu
 	if exists('g:enabled_copilot')
