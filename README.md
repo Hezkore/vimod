@@ -33,7 +33,7 @@ To install VIMod, follow these steps:
 	```
 Run Vim 9.0 or later.
 
-Don't forget to check the [Updating](#updating) section for the latest updates.
+Don't forget to check the [Updating](#updating) section to keep VIMod up to date.
 
 Continue to the [Usage](#usage) section to learn how to customize and use VIMod.
 
