@@ -1,5 +1,5 @@
 " LSP - Language Server Protocol support
-let g:enabled_lsp = get(g:, 'enabled_lsp', 0)
+let g:enabled_lsp = get(g:, 'enabled_lsp', 1)
 if g:enabled_lsp
 	" Main LSP runner
 	Plug 'prabirshrestha/vim-lsp'
