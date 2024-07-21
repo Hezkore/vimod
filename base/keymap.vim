@@ -45,7 +45,7 @@ if exists('g:enabled_ctrlp')
 endif
 
 " Leader o toggles or focuses the Lexplore
-nnoremap <leader>o :call ToggleOrFocusLexplore()<CR>
+nnoremap <silent> <leader>o :call ToggleOrFocusLexplore()<CR>
 
 " Extended key mappings
 function! VIModExtendedKeys()
