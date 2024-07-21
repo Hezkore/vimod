@@ -27,21 +27,21 @@ nmap <silent> <leader>q :bp! <BAR> bd! #<CR>
 nmap <silent> <leader>t :e#<CR>
 
 " Leader cd to change the working directory to the current buffer's directory
-nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Number Leader bb to switch to a specific buffer
-nnoremap <expr> <Leader>gb ':buffer '.(v:count > 0 ? v:count : '').'<CR>'
+nnoremap <expr> <leader>gb ':buffer '.(v:count > 0 ? v:count : '').'<CR>'
 
-" Leader c to open Copilot panel
+" Leader cp to open Copilot panel
 if exists('g:enabled_copilot')
-	nnoremap <Leader>c :Copilot panel<CR>
+	nnoremap <silent> <leader>cp :Copilot panel<CR>
 endif
 
 if exists('g:enabled_ctrlp')
-	" Leader bl to list all buffers
-	nnoremap <Leader>lb :CtrlPBuffer<CR>
+	" Leader lb to list all buffers
+	nnoremap <silent> <leader>lb :CtrlPBuffer<CR>
 	" Leader p to open CtrlP
-	nnoremap <Leader>p :CtrlP<CR>
+	nnoremap <silent> <leader>p :CtrlP<CR>
 endif
 
 " Leader o toggles or focuses the Lexplore
