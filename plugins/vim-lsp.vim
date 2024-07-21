@@ -25,7 +25,6 @@ let g:lsp_diagnostics_virtual_text_align = 'after'
 " Disable inlay hints, such as parameter names
 let g:lsp_inlay_hints_enabled = 0
 
-
 let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_echo_delay = 150
 
