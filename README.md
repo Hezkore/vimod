@@ -33,6 +33,8 @@ Run Vim 9.0 or later.
 
 Don't forget to check the [Updating](#updating) section for the latest updates.
 
+Continue to the [Usage](#usage) section to learn how to customize and use VIMod.
+
 ## Usage
 
 ### Customizing VIMod
@@ -43,46 +45,78 @@ Changes are auto-applied upon saving the vimrc file, and can also be manually ap
 
 Restarting Vim is advised to ensure all settings are applied.
 
-All settings can be set after the VIMod runtime is loaded, however, to be efficient, the following settings can be set before the runtime is loaded.
+All settings can be set after the VIMod runtime is loaded, however, to be efficient, the following settings should be set before the runtime is loaded.
 * `mapleader`
 * `colorscheme` _(note that `set termguicolors` is also not set if a colorscheme is set before the runtime)_
 
 ### Leader Key
-VIMod uses <kbd>Space</kbd> as the leader key.\
-Add `let mapleader = ","` before the VIMod runtime in `:Settings` if you prefer <kbd>,</kbd> as the leader key.
+VIMod uses <kbd>,</kbd> as the leader key.\
+While the leader key can be changed, it is recommended to not use <kbd>Space</kbd>, as the [quick menu](#quick-menu) uses it.
+
+### Quick Menu
+The quick menu, accessible by pressing <kbd>Space</kbd>, appears as a menu bar at the top of the Vim window.\
+It functions similarly to a leader key but provides a visual guide to the available commands.
+
+Each menu item displays a highlighted letter, the key to press to activate that command.\
+Importantly, these activations are not case-sensitive. This means pressing <kbd>Space</kbd> + <kbd>b</kbd> has the same effect as <kbd>Space</kbd> + <kbd>B</kbd>.
 
 ### Keymaps
+<kbd>Space</kbd> access the quick menu.
+
 <kbd>Leader</kbd> + <kbd>h</kbd> or <kbd>Leader</kbd> + <kbd>j</kbd> moves jumps to the previous buffer.\
 <kbd>Leader</kbd> + <kbd>l</kbd> or <kbd>Leader</kbd> + <kbd>k</kbd> moves jumps to the next buffer.\
 <kbd>Leader</kbd> + <kbd>1</kbd> to <kbd>9</kbd> jumps to the corresponding buffer.\
 <kbd>Leader</kbd> + <kbd>q</kbd> closes the current buffer.\
 <kbd>Leader</kbd> + <kbd>n</kbd> creates a new buffer.\
-<kbd>Leader</kbd> + <kbd>bl</kbd> lists and lets you pick a buffer to jump to.
+<kbd>Leader</kbd> + <kbd>lb</kbd> lists and lets you pick a buffer to jump to.\
+<kbd>#nr</kbd> + <kbd>Leader</kbd> + <kbd>gb</kbd> jumps to the buffer with the corresponding number.
+
+<kbd>Leader</kbd> + <kbd>p</kbd> opens the fuzzy file finder.
 
 <kbd>Leader</kbd> + <kbd>o</kbd> opens the file explorer.\
 <kbd>Leader</kbd> + <kbd>cd</kbd> changes the current directory to the file's directory.
 
 ### Extended keymaps
 Because VIMod is designed to be as unobtrusive as possible, the extended keymaps are disabled by default.\
-To enable them, add `VIModExtendedKeys` to your vimrc file.\
-You can also enable them temporarily with `:VIModExtendedKeys`.
+To enable them, add `VIModKeys` to your vimrc file, or enable them temporarily with `:VIModKeys`.
 
 <kbd>Ctrl</kbd> + <kbd>h</kbd> or <kbd>Ctrl</kbd> + <kbd>j</kbd> moves jumps to the previous buffer.\
 <kbd>Ctrl</kbd> + <kbd>l</kbd> or <kbd>Ctrl</kbd> + <kbd>k</kbd> moves jumps to the next buffer.
 
+<kbd>Ctrl</kbd> + <kbd>p</kbd> opens fuzzy file finder.
+
 <kbd>Ctrl</kbd> + <kbd>Space</kbd>  to show auto-complete and signature help.\
-<kbd>Tab</kbd> accepts the auto-complete suggestion.
+<kbd>Tab</kbd> accepts the auto-complete suggestion.\
+<kbd>K</kbd> is replaced with the [LSP](#lsp) context menu.
+
+### LSP
+VIMod has a built-in Language Server Protocol _(LSP)_ client.\
+It will provide auto-completion, signature help, go-to-definition, and much more.
+
+This is all managed automatically, as long as a LSP server is installed for the current filetype.\
+LSP servers can be automatically installed, and you will be prompted when a server is available for download for the current filetype.
+
+LSP options can be found in the quick menu under the `LSP` section.\
+You can also install and manage LSP servers using the quick menu.
+
+However, If you want to use the commands directly, you can use the following commands:
+* `:LspInstallServer` - Install an LSP server for the current filetype.
+* `:LspManageServers` - Manage all LSP servers.
+* `:LspUninstallServer <lsp name>` - Uninstall the specified LSP server.
 
 ## Plugins
 While VIMod strives to keep plugin use to a minimum, some features are best handled by well-maintained and regularly updated plugins.
 
 The following plugins are included and installed automatically with VIMod:
 * [vim-plug](https://github.com/junegunn/vim-plug) - Plugin manager
-* [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot integration
-* [CtrlP](https://github.com/ctrlpvim/ctrlp.vim) - Fuzzy finder
 * [Dracula](https://github.com/dracula/vim) - Dracula dark theme
-* [LSP](https://github.com/yegappan/lsp) - Language Server Protocol
 * [Surrround](https://github.com/tpope/vim-surround) - Modify surroundings
+* [CtrlP](https://github.com/ctrlpvim/ctrlp.vim) - Fuzzy finder
+* [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot integration
+* [Vim-LSP](https://github.com/prabirshrestha/vim-lsp) - Language Server Protocol client
+* [LSP Settings](https://github.com/mattn/vim-lsp-settings) - Automatic installation and settings of LSP servers
+* [Asyncomplete](https://github.com/prabirshrestha/asyncomplete.vim) - Asynchronous completion while typing
+* [Asyncomplete-LSP](prabirshrestha/asyncomplete-lsp.vim) - Asynchronous completion LSP integration
 
 ### Adding plugins
 Every VIMod plugin is self-contained in its own file

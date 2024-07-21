@@ -21,3 +21,12 @@ function SetVIModStartDir()
 	endif
 endfunction
 call SetVIModStartDir()
+
+" Function for returning the leader key
+function LeaderKey()
+	if exists('g:mapleader')
+		return g:mapleader
+	else
+		return "Leader"
+	endif
+endfunction

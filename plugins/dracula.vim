@@ -9,8 +9,6 @@ set background=dark " Set the background to dark
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()
-	"echomsg "Applying Dracula theme"
-	
 	" Only apply the theme is no other colorscheme has been set
 	if !exists('g:colors_name')
 		if has("termguicolors")

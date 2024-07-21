@@ -50,4 +50,5 @@ if exists('g:plug_install')
 	execute 'PlugInstall --sync | q'
 endif
 
+" Execute the final plugin settings
 doautocmd User VIModPlugSettings

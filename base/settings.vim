@@ -210,7 +210,7 @@ set diffopt=vertical
 set mousehide
 
 " Always show the signcolumn
-set signcolumn=number
+set signcolumn=yes
 
 " Restore cursor to last position in file when reopened
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

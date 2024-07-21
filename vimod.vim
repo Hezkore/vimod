@@ -10,8 +10,8 @@
 
 " Load base
 runtime vimod/base/common.vim
-runtime vimod/base/keymap.vim
 runtime vimod/base/plugins.vim
+runtime vimod/base/keymap.vim
 runtime vimod/base/settings.vim
 runtime vimod/base/statusline.vim
 runtime vimod/base/tabline.vim
