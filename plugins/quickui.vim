@@ -28,7 +28,88 @@ function! s:plugin_settings()
 		let name = quickui#input#open('Enter file name: ', "Saves to " . expand('%:p:h'))
 		if name != ""
 			exec 'saveas ' . name
+		else
+			echo "No file name provided"
 		endif
+	endfunction
+	
+	function! SaveSessionWithPrompt()
+		let name = quickui#input#open('Enter session name: ', g:current_session != '' ? g:current_session : 'My Session')
+		if name != ""
+			call MakeSession( name )
+		else
+			echo "No session name provided"
+		endif
+		
+		" Redo the menu
+		call AddSessionList()
+	endfunction
+	
+	function! RemoveSessionWithList()
+		let session_list = ProduceSessionList()
+		let linelist = []
+		let index = 0
+		for session in session_list
+			let index += 1
+			if index < 10
+				let linelist += [["&" . index . ". " .session, session]]
+			else
+				let linelist += [[index . ". " .session, session]]
+			endif
+		endfor
+		" restore last position in previous listbox
+		let opts = {'title': 'Select a session to remove'}
+		let l:selection = quickui#listbox#inputlist(linelist, opts)
+		if l:selection == -1
+			echo "No session selected"
+			return
+		else
+			echo "Remove session \"" . linelist[l:selection][1] . "\"?"
+		endif
+		
+		" Ask if user is sure
+		let question = "Are you sure you want to remove the session:\n\"" . linelist[l:selection][1] . "\"?"
+		let choices = "&Yes\n&No"
+		let choice = quickui#confirm#open(question, choices, 2, 'Confirm')
+		if choice == 1
+			call RemoveSession( linelist[l:selection][1] )
+			" Redo the menu
+			call AddSessionList()
+		else
+			echo "No session removed"
+		endif
+	endfunction
+	
+	function! AddSessionList()
+		"if exists('g:enabled_sessions') && g:enabled_sessions == 1
+			call quickui#menu#clear('&Sessions')
+			
+			call quickui#menu#install('&Sessions', [
+				\ ["&Save As...", 'call SaveSessionWithPrompt()', "Save the current session"],
+			\ ])
+			
+			if g:last_session != ''
+				call quickui#menu#install('&Sessions', [
+					\ ["&Load Last", 'call LoadSession( "' . g:last_session . '" )', "Load the session \"" . g:last_session . "\""],
+				\ ])
+			endif
+			
+			let session_list = ProduceSessionList()
+			if len(session_list) > 0
+				call quickui#menu#install('&Sessions', [
+					\ ["--"],
+					\ ["&Remove...", 'call RemoveSessionWithList()', "Remove a session"],
+					\ ["--"],
+				\ ])
+				for session in session_list
+					call quickui#menu#install('&Sessions', [
+						\ [session, 'call LoadSession("' . session . '")', "Load session \"" . session . "\""],
+					\ ])
+				endfor
+			endif
+			
+			call quickui#menu#change_weight('&Sessions', 2)
+		"endif
 	endfunction
 	
 	" Buffer menu
@@ -48,7 +129,20 @@ function! s:plugin_settings()
 		\ [ "--", '' ],
 		\ [ "Save All", 'wa' ],
 		\ [ "Close All", 'qa' ],
-	\ ])
+	\ ], 1)
+	
+	" Sessions menu
+	if exists('g:enabled_sessions') && g:enabled_sessions == 1
+		" Session list
+		call AddSessionList()
+	endif
+	
+	" NetRw menu
+	call quickui#menu#install('&NetRw', [
+		\ [ "&Open Explorer\t%{LeaderKey()}+o", 'call ToggleOrFocusLexplore()' ],
+		\ [ "--", '' ],
+		\ [ "Change &Directory\t%{LeaderKey()}+cd", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
+	\ ], 3)
 	
 	" Window menu
 	call quickui#menu#install('&Window', [
@@ -69,26 +163,14 @@ function! s:plugin_settings()
 		\ [ "&Equalize", 'wincmd =', 'Equalize all window sizes' ],
 		\ [ "Equalize Height", 'wincmd _=', 'Equalize the height of all windows' ],
 		\ [ "Equalize Width", 'wincmd |=', 'Equalize the width of all windows' ],
-	\ ])
-	
-	" NetRw menu
-	call quickui#menu#install('&NetRw', [
-		\ [ "&Open Explorer\t%{LeaderKey()}+o", 'call ToggleOrFocusLexplore()' ],
-		\ [ "--", '' ],
-		\ [ "Change &Directory\t%{LeaderKey()}+cd", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
-	\ ])
-	
-	" Spelling menu
-	call quickui#menu#install('&Spelling', [
-		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
-	\ ])
+	\ ], 4)
 	
 	" Terminal menu
 	call quickui#menu#install('&Terminal', [
 		\ [ "New &Terminal", 'bot terminal ++rows=15', "Open a new terminal" ],
 		\ [ "New Terminal &Persistent", 'bot terminal ++rows=15 ++noclose', "Open a new terminal that becomes an editable buffer" ],
 		\ [ "Make &Window Terminal", 'terminal ++curwin', "Convert the current window into a terminal" ],
-	\ ])
+	\ ], 5)
 	
 	" Copilot menu
 	if exists('g:enabled_copilot') && g:enabled_copilot == 1
@@ -96,9 +178,9 @@ function! s:plugin_settings()
 			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
 			\ ["--", ''],
 			\ ["Show Suggestion &Panel\t%{LeaderKey()}+cp", 'Copilot panel'],
-		\ ])
+		\ ], 6)
 	endif
-	
+		
 	" If the LSP server is installed, add the LSP menu
 	if exists('g:enabled_lsp') && g:enabled_lsp == 1
 		" LSP quick menu
@@ -118,7 +200,7 @@ function! s:plugin_settings()
 			\ ["%{LspRunningForBuffer()==1? 'S&top':'S&tart'} LSP", 'call LspToggleState()'],
 			\ ["%{LspRunningForBuffer()==1? '&Update':'&Install'} LSP Server", 'LspInstallServer'],
 			\ ["&Manage LSP Servers", 'LspManageServers'],
-		\ ])
+		\ ],7)
 		
 		" LSP context menu
 		let g:context_menu_k = [
@@ -150,6 +232,14 @@ function! s:plugin_settings()
 		" LSP not installed
 		call quickui#menu#install('&LSP', [
 			\ ['&LSP not installed', ''],
-		\ ])
+		\ ],7)
 	endif
+	
+	" Options menu
+	call quickui#menu#install('&Options', [
+		\ ["&Edit Vim Configuration", 'Settings', "Edit the Vim configuration file"],
+		\ ["&Reload Vim Configuration", 'ApplySettings', "Reload the Vim configuration file"],
+		\ ["--", ''],
+		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
+	\ ],8)
 endfunction

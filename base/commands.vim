@@ -24,3 +24,9 @@ function! VIModShowSettings()
 	autocmd BufWritePost $MYVIMRC source $MYVIMRC
 endfunction
 command! Settings call VIModShowSettings()
+
+" Show current session
+command! Session echo "Current session is \"" . GetCurrentSession() . "\""
+
+" Show last session
+command! LastSession echo "Last session was \"" . g:last_session . "\""
