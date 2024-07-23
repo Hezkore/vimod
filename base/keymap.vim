@@ -18,7 +18,7 @@ nmap <silent> <leader>l :bnext!<CR>
 nmap <silent> <leader>k :bnext!<CR>
 
 " Number Leader gb to switch to a specific buffer, or the next buffer
-nnoremap <expr> <leader>gb (v:count > 1 ? ':buffer ' . v:count : ':bnext!').'<CR>'
+nnoremap <silent> <expr> <leader>gb (v:count > 1 ? ':buffer ' . v:count : ':bnext!').'<CR>'
 
 " Leader n to create a new scratch buffer
 nmap <silent> <leader>n :enew<CR>
