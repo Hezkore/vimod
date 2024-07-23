@@ -67,10 +67,13 @@ function! ProduceSessionList()
 	for l:file in split(glob(g:sessions_dir . '/*.vim'), '\n')
 		let l:sessionname = fnamemodify(l:file, ':t:r')
 		if l:sessionname != g:session_default_name
-			call add(l:sessionlist, l:sessionname)
+			call add(l:sessionlist, {'name': l:sessionname, 'mtime': getftime(l:file)})
 		endif
 	endfor
-	return l:sessionlist
+	" Sort the list by modification time in descending order
+	call sort(l:sessionlist, {a, b -> b.mtime - a.mtime})
+	" Extract the session names from the sorted list
+	return map(l:sessionlist, 'v:val.name')
 endfunction
 
 function! RemoveSession( session )
