@@ -108,7 +108,7 @@ function! s:plugin_settings()
 				endfor
 			endif
 			
-			call quickui#menu#change_weight('&Sessions', 2)
+			call quickui#menu#change_weight('&Sessions', 200)
 		"endif
 	endfunction
 	
@@ -129,7 +129,7 @@ function! s:plugin_settings()
 		\ [ "--", '' ],
 		\ [ "Save All", 'wa' ],
 		\ [ "Close All", 'qa' ],
-	\ ], 1)
+	\ ], 100)
 	
 	" Sessions menu
 	if exists('g:enabled_sessions') && g:enabled_sessions == 1
@@ -142,7 +142,7 @@ function! s:plugin_settings()
 		\ [ "&Open Explorer\t%{LeaderKey()}+o", 'call ToggleOrFocusLexplore()' ],
 		\ [ "--", '' ],
 		\ [ "Change &Directory\t%{LeaderKey()}+cd", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
-	\ ], 3)
+	\ ], 300)
 	
 	" Window menu
 	call quickui#menu#install('&Window', [
@@ -163,14 +163,14 @@ function! s:plugin_settings()
 		\ [ "&Equalize", 'wincmd =', 'Equalize all window sizes' ],
 		\ [ "Equalize Height", 'wincmd _=', 'Equalize the height of all windows' ],
 		\ [ "Equalize Width", 'wincmd |=', 'Equalize the width of all windows' ],
-	\ ], 4)
+	\ ], 400)
 	
 	" Terminal menu
 	call quickui#menu#install('&Terminal', [
 		\ [ "New &Terminal", 'bot terminal ++rows=15', "Open a new terminal" ],
 		\ [ "New Terminal &Persistent", 'bot terminal ++rows=15 ++noclose', "Open a new terminal that becomes an editable buffer" ],
 		\ [ "Make &Window Terminal", 'terminal ++curwin', "Convert the current window into a terminal" ],
-	\ ], 5)
+	\ ], 500)
 	
 	" Copilot menu
 	if exists('g:enabled_copilot') && g:enabled_copilot == 1
@@ -178,7 +178,7 @@ function! s:plugin_settings()
 			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
 			\ ["--", ''],
 			\ ["Show Suggestion &Panel\t%{LeaderKey()}+cp", 'Copilot panel'],
-		\ ], 6)
+		\ ], 600)
 	endif
 		
 	" If the LSP server is installed, add the LSP menu
@@ -200,7 +200,7 @@ function! s:plugin_settings()
 			\ ["%{LspRunningForBuffer()==1? 'S&top':'S&tart'} LSP", 'call LspToggleState()'],
 			\ ["%{LspRunningForBuffer()==1? '&Update':'&Install'} LSP Server", 'LspInstallServer'],
 			\ ["&Manage LSP Servers", 'LspManageServers'],
-		\ ],7)
+		\ ],700)
 		
 		" LSP context menu
 		let g:context_menu_k = [
@@ -232,7 +232,7 @@ function! s:plugin_settings()
 		" LSP not installed
 		call quickui#menu#install('&LSP', [
 			\ ['&LSP not installed', ''],
-		\ ],7)
+		\ ],700)
 	endif
 	
 	" Options menu
@@ -241,5 +241,5 @@ function! s:plugin_settings()
 		\ ["&Reload Vim Configuration", 'ApplySettings', "Reload the Vim configuration file"],
 		\ ["--", ''],
 		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
-	\ ],8)
+	\ ],800)
 endfunction

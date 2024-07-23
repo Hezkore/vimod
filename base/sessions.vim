@@ -33,6 +33,10 @@ function! MakeSession(session = '')
 endfunction
 
 function! LoadSession( session = '' )
+	if g:current_session == a:session
+		echo "Session \"" . g:current_session . "\" is already loaded"
+		return
+	endif
 	let g:current_session = a:session != '' ? a:session : g:current_session
 	if g:current_session != ''
 		let l:sessionfile = GetPathToCurrentSession()
