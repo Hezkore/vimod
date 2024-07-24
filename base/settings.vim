@@ -25,6 +25,9 @@ set relativenumber
 " Set the width of the line numbers
 set numberwidth=6
 
+" Always show the tabline
+set showtabline=2
+
 " Show a vertical line at the 80th and 120th columns
 set colorcolumn=80,120
 
@@ -115,7 +118,7 @@ set ignorecase
 " Enable smart case for search: case-insensitive unless a capital letter is used
 set smartcase
 
-" Use Tab for Tabs
+" Use Tab for Tabs by default
 set noexpandtab
 
 " Set the number of spaces for a tab character for alignment

@@ -1,44 +1,44 @@
 " Custom tabline
+let g:show_unlisted_buffers = get(g:, 'show_unlisted_buffers', 0)
+let g:show_window_count = get(g:, 'show_window_count', 0)
 
-set showtabline=2
 function! CustomTabLine()
-	let s = ''
-	" Get the list of all buffers
-	let bufnr_list = range(1, bufnr('$'))
-	" Filter out unlisted buffers
-	let bufnr_list = filter(bufnr_list, 'buflisted(v:val)')
-	" Loop through each buffer
-	for bufnr in bufnr_list
-		" Set highlight
-		if bufnr == bufnr('%')
-			let s .= '%#TabLineSel#'
-		else
-			let s .= '%#TabLine#'
-		endif
-		" Set the buffer number (for mouse clicks)
-		let s .= '%' . bufnr . 'T'
-		" Add buffer number
-		let s .= ' ' . bufnr . '.'
-		" Get buffer name and status
-		let bufname = bufname(bufnr)
-		let modified = getbufvar(bufnr, "&modified")
-		" Shorten the buffer name
-		let bufname_short = pathshorten(fnamemodify(bufname, ':t'))
-		" Add buffer name
-		if bufname_short == ''
-			let s .= '[No Name]'
-		else
-			let s .= bufname_short
-		endif
-		" Add modified label [+] if the buffer is modified
-		if modified
-			let s .= '[+]'
-		endif
-		" Add space after buffer name
-		let s .= ' '
+	let s = '%#TabLineFill#'
+	let current_tab = tabpagenr()
+	let tab_count = tabpagenr('$')
+	
+	" Show current tab number and total tab count
+	if tab_count > 1
+		let s .= '%#TabLineSel#Tab[' . current_tab . '/' . tab_count . ']%#TabLineFill# '
+	endif
+	
+	" Show window count, current and total
+	if g:show_window_count == 1
+		let s .= '%#TabLineSel#Win[' . winnr() . '/' . winnr('$') . ']%#TabLineFill# '
+	endif
+	
+	" Get all the buffers
+	let all_buffers = range(1, bufnr('$'))
+	
+	" Display listed buffers
+	for bufnr in filter(copy(all_buffers), 'buflisted(v:val)')
+		let s .= (bufnr == bufnr('%') ? '%#TabLineSel#' : '%#TabLine#')
+		let bufname = empty(bufname(bufnr)) ? '[No Name]' : fnamemodify(bufname(bufnr), ':t')
+		let bufstatus = (getbufvar(bufnr, '&mod') ? '[+]' : '') . (getbufvar(bufnr, '&ro') ? '[-]' : '')
+		let s .= bufnr . ':' . bufname . bufstatus . '%#TabLineFill# '
 	endfor
-	" After the last buffer fill with TabLineFill and reset buffer nr
-	let s .= '%#TabLineFill#%T'
-	return s
+	
+	" Display unlisted buffers if enabled
+	if g:show_unlisted_buffers == 1
+		for bufnr in filter(copy(all_buffers), '!buflisted(v:val)')
+			let s .= '%#TabLineFill#'
+			let s .= (bufnr == bufnr('%') ? '%#TabLineSel#' : '%#TabLine#')
+			let s .=  '<' . bufnr . ':' . (empty(bufname(bufnr)) ? '[No Name]' : fnamemodify(bufname(bufnr), ':t'))
+			let s .= '>%#TabLineFill# '
+		endfor
+	endif
+	
+	return s . '%#TabLineFill#%T'
 endfunction
+
 set tabline=%!CustomTabLine()

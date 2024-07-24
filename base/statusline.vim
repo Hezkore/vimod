@@ -34,6 +34,8 @@ augroup StatusLine
 	autocmd!
 	autocmd WinEnter * setlocal statusline=%!ActiveStatusLine()
 	autocmd WinLeave * setlocal statusline=%!InactiveStatusLine()
+	autocmd BufEnter * setlocal statusline=%!ActiveStatusLine()
+	autocmd BufLeave * setlocal statusline=%!InactiveStatusLine()
 augroup END
 set statusline=%!ActiveStatusLine()
 
@@ -66,9 +68,10 @@ endfunction
 " Function for setting the file information in the statusline
 function! StatusLineFile()
 	let s:statuslinefile = '%(%w %)'
-	let s:statuslinefile .= '%t%<'
-	let s:statuslinefile .= '%m'
-	let s:statuslinefile .= '%( %{&readonly?"⊝":""}%)'
+	let s:statuslinefile .= '%n:%t%<'
+	"let s:statuslinefile .= '%m'
+	let s:statuslinefile .= '%(%{(&readonly || !&modifiable) ? "[-]" : ""}%)'
+	let s:statuslinefile .= '%(%{&modified?"[+]":""}%)'
 	let s:statuslinefile .= '%='
 	let s:statuslinefile .= '%(%y %)'
 	
