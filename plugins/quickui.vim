@@ -2,8 +2,8 @@
 Plug 'skywind3000/vim-quickui'
 
 " Settings that can be set before the plugin is loaded
-let g:enabled_quickmenu = 1
-let g:quickui_color_scheme = 'system' " Try to match the system color scheme
+let g:enabled_quickmenu = get(g:, 'enabled_quickmenu', 1)
+let g:quickui_color_scheme = get(g:, 'quickui_color_scheme', 'system')
 let g:quickui_border_style = 2
 let g:quickui_show_tip = 1 " Show tips in the command line
 let g:quickui_protect_hjkl = 1 " Give menu items priority over hjkl movement
@@ -242,4 +242,15 @@ function! s:plugin_settings()
 		\ ["--", ''],
 		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
 	\ ],800)
+	
+	" Make sure input text is readable by settings the input text color at vim enter
+	function! g:QuickDefaultInputColor()
+		hi! link QuickInput PmenuSel
+		hi! link QuickCursor Search
+		hi! link QuickVisual PmenuSbar
+	endfunction
+	augroup QuickDefaultInput
+		autocmd!
+		autocmd VimEnter * call g:QuickDefaultInputColor()
+	augroup END
 endfunction
