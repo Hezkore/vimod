@@ -1,3 +1,10 @@
+" OS specific path separator
+if has("win32") || has("win64")
+    let g:path_separator = '\'
+else
+    let g:path_separator = '/'
+endif
+
 " Function for returning the Vim directory
 function VimDir()
 	if has('win32') || has('win64')

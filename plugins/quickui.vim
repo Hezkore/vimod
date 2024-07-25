@@ -25,7 +25,7 @@ function! s:plugin_settings()
 	
 	function! WriteAsWithPrompt()
 		" Default to the current file's directory
-		let name = quickui#input#open('Enter file name: ', "Saves to " . expand('%:p:h'))
+		let name = input('Enter file name: ', expand('%:p:h') . g:path_separator . expand('%:t'))
 		if name != ""
 			exec 'saveas ' . name
 		else
@@ -34,7 +34,7 @@ function! s:plugin_settings()
 	endfunction
 	
 	function! SaveSessionWithPrompt()
-		let name = quickui#input#open('Enter session name: ', g:current_session != '' ? g:current_session : 'My Session')
+		let name = input('Enter session name: ', g:current_session != '' ? g:current_session : 'My Session')
 		if name != ""
 			call MakeSession( name )
 		else
