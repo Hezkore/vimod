@@ -1,192 +1,46 @@
 # VIMod⚡
-VIMod _(VIM + Vemod)_ is my personal [Vim](https://github.com/vim/vim) configuration.
+VIMod _(VIM + Vemod)_ is my personal [Vim 9.0+](https://github.com/vim/vim) configuration.
 
-The core idea is to keep the complexity buried in the configuration, and out of the user's workflow and initial setup.
 
-VIMod is designed to complement any existing Vim setup, adding features without complicating the workflow. To integrate VIMod, simply include the VIMod runtime in your existing vimrc file. If you ever decide to remove VIMod, your Vim setup will revert to its previous state.
+VIMod is designed to complement any existing Vim setup, but works equally well on a fresh install! If you ever decide to remove VIMod, your Vim setup will return to its original state.
+
+Learn more about VIMod on our [Wiki](https://github.com/Hezkore/vimod/wiki).
+
+<small>_Never used Vim before?_\
+_Read the [new user](https://github.com/Hezkore/vimod/wiki) guide to get started._</small>
 
 ![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
 
-## Philosophy
-* Prioritize Vim's built-in features and native functionality to minimize usage of external plugins.
-* Design each component to be self-contained, with both setup and configuration in its own .vim file.
-* Ensure individual components can be removed without breaking the rest of the setup.
-* Keep default Vim behavior unchanged, relying on the leader key for most customizations.
-* Each programming or scripting language must have its own self-contained configuration file to adjust Vim's behavior to match the language's rules.
-* Local user settings should not be mixed with the base VIMod settings but instead written in the user's regular vimrc file.
-* Initial installation should require nothing more than the inclusion of the VIMod runtime in the user's existing vimrc file, with no additional commands needed for installation.
-
 ## Install
-To install VIMod, follow these steps:
+Just copy VIMod to your Vim configuration directory and add the runtime to your vimrc file. Launch Vim normal.\
+Clone with Git if you want to easily update VIMod in the future.
+
+OS specific instructions:
+<details>
+<summary><b>Windows</b></summary>
 
 1. Clone the VIMod repository to your local machine.
 	```shell
-	git clone https://github.com/hezkore/vimod.git <path-to-vimfiles>/vimod
+	git clone https://github.com/hezkore/vimod.git $HOME/vimfiles/vimod
 	```
-
-> [!NOTE]
-> `<path-to-vimfiles>` will depend on your OS. For Unix-based systems, use `~/.vim`. For Windows, use `$HOME/vimfiles`.
-
 2. Add the runtime at the top of your `vimrc` file.
 	```vim
 	runtime vimod/vimod.vim
 	```
-Run Vim 9.0 or later.
+</details>
 
-Don't forget to check the [Updating](#updating) section to keep VIMod up to date.
+<details>
+<summary><b>Unix-based</b></summary>
 
-Continue to the [Usage](#usage) section to learn how to customize and use VIMod.
-
-## Usage
-
-### Customizing VIMod
-To customize VIMod, add your adjustments to your vimrc file, not directly to the VIMod base.
-
-Access and edit your vimrc file  by using `:Settings`. This command shows your vimrc alongside VIMod's default settings.\
-Changes are auto-applied upon saving the vimrc file, and can also be manually applied with `:ApplySettings`.
-
-Restarting Vim is advised to ensure all settings are applied.
-
-All settings can be set after the VIMod runtime is loaded, however, to be efficient, the following settings should be set before the runtime is loaded.
-* `mapleader`
-* `colorscheme` _(note that `set termguicolors` is also not set if a colorscheme is set before the runtime)_
-* `let g:enabled_<plugin> = 0`
-
-### Leader Key
-VIMod uses <kbd>,</kbd> as the leader key.\
-You can change the key with, for example, `let mapleader = "§"` in your vimrc file.\
-
-It is <u>not</u> recommended to use <kbd>Space</kbd>, as the [quick menu](#quick-menu) uses it.
-
-### Quick Menu
-The quick menu, accessible by pressing <kbd>Space</kbd>, appears as a menu bar at the top of the Vim window.\
-It functions similarly to a leader key, but provides a visual guide to the available commands.
-
-Each menu item displays a highlighted letter, the key to press to activate that command.\
-Importantly, these activations are not case-sensitive. And you should always press the lower-case letter.
-
-### Keymaps
-<kbd>Space</kbd> opens the quick menu.
-
-To go to the previous buffer, use <kbd>Leader</kbd> followed by either <kbd>h</kbd> or <kbd>j</kbd> or <kbd>g</kbd>+<kbd>b</kbd>\
-To go to the next buffer, use <kbd>Leader</kbd> followed by either <kbd>l</kbd> or <kbd>k</kbd> or <kbd>g</kbd>+<kbd>B</kbd>\
-<kbd>Leader</kbd>+<kbd>n</kbd> creates a new buffer.\
-<kbd>Leader</kbd>+<kbd>q</kbd> closes the current buffer.\
-<kbd>Leader</kbd>+<kbd>t</kbd> opens the last closed buffer.\
-<kbd>#nr</kbd>+<kbd>Leader</kbd>+<kbd>g</kbd>+<kbd>b</kbd> jumps to the buffer with the corresponding number.\
-<kbd>Leader</kbd>+<kbd>b</kbd> opens the fuzzy buffer finder.
-
-<kbd>Leader</kbd>+<kbd>p</kbd> opens the fuzzy file finder.
-
-<kbd>Leader</kbd>+<kbd>o</kbd> opens or focuses the file explorer.\
-<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>d</kbd> changes the directory to the current buffer's directory.
-
-<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>p</kbd> opens the GitHub Copilot suggestions panel.
-
-### Extended keymaps
-Because VIMod is designed to be as unobtrusive as possible, the extended keymaps are disabled by default.\
-To enable them, add `VIModKeys` to your vimrc file, or enable them temporarily with `:VIModKeys`.
-
-<kbd>Ctrl</kbd>+<kbd>h</kbd> moves to the previous buffer.\
-<kbd>Ctrl</kbd>+<kbd>l</kbd> moves to the next buffer.\
-If your terminal supports it, <kbd>Ctrl</kbd>+<kbd>Tab</kbd> and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd> can also be used.
-
-<kbd>Ctrl</kbd>+<kbd>p</kbd> opens fuzzy file finder.
-
-<kbd>insert</kbd> | <kbd>Ctrl</kbd>+<kbd>x</kbd>+<kbd>Ctrl</kbd>+<kbd>g</kbd> triggers a GitHub Copilot suggestion.
-
-<kbd>insert</kbd> | <kbd>Ctrl</kbd>+<kbd>Space</kbd> shows auto-complete and signature help.\
-<kbd>insert</kbd> | <kbd>Enter</kbd> no longer accepts the auto-complete suggestion.\
-<kbd>insert</kbd> | <kbd>Tab</kbd> accepts the auto-complete suggestion.\
-<kbd>K</kbd> is replaced with the [LSP](#lsp) context menu.
-
-### LSP
-VIMod has a built-in Language Server Protocol _(LSP)_ client.\
-It will provide auto-completion, signature help, go-to-definition, and much more.
-
-This is all managed automatically, as long as a LSP server is installed for the current filetype.\
-LSP servers can be automatically installed, and you will be prompted when a server is available for download for the current filetype.
-
-LSP options can be found in the quick menu under the `LSP` section.\
-You can also install and manage LSP servers using the quick menu.
-
-Can be completely disabled with `let g:enabled_lsp = 0` in your vimrc file.
-
-Auto-completion is enabled by default.\
-Can be completely disabled with `let g:asyncomplete_auto_popup = 0` in your vimrc file.\
-With the extended keys, use <kbd>Ctrl</kbd>+<kbd>Space</kbd> to manually trigger auto-complete, and  <kbd>Tab</kbd> to accept the suggestion.\
-Use <kbd>K</kbd> to open the LSP context menu on a symbol.
-
-If you want to use any commands directly, you can use the following:
-* `:LspInstallServer` - Install an LSP server for the current filetype.
-* `:LspManageServers` - Manage all LSP servers.
-* `:LspUninstallServer <lsp name>` - Uninstall the specified LSP server.
-
-Snippets are also provided for various languages and will be displayed in the auto-complete suggestions.\
-With the extended keys, use <kbd>Tab</kbd> to accept the snippet, and then <kbd>Tab</kbd> again to jump to the next snippet placeholder.
-
-Can be completely disabled with `let g:enabled_snippets = 0` in your vimrc file.
-
-### GitHub Copilot
-Copilot is a GitHub AI-powered code completion tool.\
-It runs independently from the LSP, but can still be used in conjunction with it.
-
-Copilot requires an active [GitHub Copilot subscription](https://github.com/features/copilot/plans) to work.
-
-Open the Copilot suggestions panel with <kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>p</kbd>.\
-And with the extended keys, use <kbd>Ctrl</kbd>+<kbd>x</kbd>+<kbd>Ctrl</kbd>+<kbd>g</kbd> to trigger a suggestion in insert mode.
-
-Can be completely disabled with `let g:enabled_copilot = 0` in your vimrc file.
-
-## Plugins
-While VIMod strives to keep plugin use to a minimum, some features are best handled by well-maintained and regularly updated plugins.
-
-The following plugins are included and installed automatically with VIMod:
-* [vim-plug](https://github.com/junegunn/vim-plug) - Plugin manager
-* [CtrlP](https://github.com/ctrlpvim/ctrlp.vim) - Fuzzy finder
-* [Dracula](https://github.com/dracula/vim) - Dracula dark theme
-* [Surrround](https://github.com/tpope/vim-surround) - Modify surroundings
-* [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot integration
-
-LSP plugins:
-* [Vim-LSP](https://github.com/prabirshrestha/vim-lsp) - Language Server Protocol client
-* [LSP Settings](https://github.com/mattn/vim-lsp-settings) - Automatic installation and settings of LSP servers
-* [Asyncomplete](https://github.com/prabirshrestha/asyncomplete.vim) - Asynchronous completion while typing
-* [Asyncomplete-LSP](prabirshrestha/asyncomplete-lsp.vim) - Asynchronous completion LSP integration
-
-Snippets plugins:
-* [Vim-Snip]() - Snippets engine
-* [Vim-Snip-Integration]() - Snippets LSP integration
-* [Friendly-Snippets]() - Snippets for various languages
-
-### Adding plugins
-Every VIMod plugin is self-contained in its own file
-
-> [!WARNING]
-> The following process is 'destructive', and should not be used unless absolutely necessary.
-
-To add your own plugins, create a new file in the `vimod/plugins` directory and add the plugin's information.\
-Example plugin file:
-```vim
-" NERDTree - tree explorer
-Plug 'preservim/nerdtree'
-
-" Settings that can be set before the plugin is loaded
-let g:NERDTreeShowHidden=1
-
-" Settings that need to be applied after the plugin is loaded
-autocmd User VIModPlugSettings call s:plugin_settings()
-function! s:plugin_settings()
-	" Map <C-n> to toggle NERDTree
-	nmap <silent> <C-n> :NERDTreeToggle<CR>
-endfunction
-```
-
-Renaming the plugin file to something like `<plugin-name>.vim.disabled` will disable the plugin.
-
-All plugins will be installed automatically the first time you run VIMod.\
-If you add a new plugin, you can run `:PlugInstall` to install it.\
-`:PlugUpdate` will update all plugins.
+1. Clone the VIMod repository to your local machine:
+	```shell
+	git clone https://github.com/hezkore/vimod.git ~/.vim/vimod
+	```
+2. Add the runtime at the top of your `vimrc` file:
+	```vim
+	runtime vimod/vimod.vim
+	```
+</details>
 
 ## Updating
 
