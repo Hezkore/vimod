@@ -4,7 +4,7 @@ VIMod _(VIM + Vemod)_ is my personal [Vim 9.0+](https://github.com/vim/vim) conf
 
 VIMod is designed to complement any existing Vim setup, but works equally well on a fresh install! If you ever decide to remove VIMod, your Vim setup will return to its original state.
 
-Learn more about VIMod on our [Wiki](https://github.com/Hezkore/vimod/wiki).
+Learn more about VIMod on the [Wiki](https://github.com/Hezkore/vimod/wiki).
 
 <small>_Never used Vim before?_\
 _Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to get started._</small>
