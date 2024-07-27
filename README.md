@@ -46,6 +46,7 @@ OS specific instructions:
 	```
 </details>
 
+Make sure to read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how to use VIMod.
 ## Updating
 
 ### VIMod
