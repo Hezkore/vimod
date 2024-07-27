@@ -2,7 +2,8 @@
 VIMod _(VIM + Vemod)_ is my personal [Vim 9.0+](https://github.com/vim/vim) configuration.
 
 
-VIMod is designed to complement any existing Vim setup, but works equally well on a fresh install! If you ever decide to remove VIMod, your Vim setup will return to its original state.
+VIMod is designed to complement any existing Vim setup, but works equally well on a fresh install!\
+If you ever decide to remove VIMod, your Vim setup will return to its original state.
 
 Learn more about VIMod on the [Wiki](https://github.com/Hezkore/vimod/wiki).
 
@@ -12,8 +13,11 @@ _Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to ge
 ![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
 
 ## Install
-Just copy VIMod to your Vim configuration directory and add the runtime to your vimrc file. Launch Vim normal.\
-Clone with Git if you want to easily update VIMod in the future.
+Just copy VIMod to your Vim configuration directory and add the runtime to your vimrc file.\
+_Clone with Git if you want to easily update VIMod in the future._
+
+Launch Vim normally.
+
 
 OS specific instructions:
 <details>
