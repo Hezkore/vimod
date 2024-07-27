@@ -7,7 +7,7 @@ VIMod is designed to complement any existing Vim setup, but works equally well o
 Learn more about VIMod on our [Wiki](https://github.com/Hezkore/vimod/wiki).
 
 <small>_Never used Vim before?_\
-_Read the [new user](https://github.com/Hezkore/vimod/wiki) guide to get started._</small>
+_Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to get started._</small>
 
 ![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
 
