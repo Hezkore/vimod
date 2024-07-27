@@ -82,34 +82,128 @@ function! s:plugin_settings()
 	
 	function! AddSessionList()
 		"if exists('g:enabled_sessions') && g:enabled_sessions == 1
-			call quickui#menu#clear('&Sessions')
-			
+		call quickui#menu#clear('&Sessions')
+		
+		call quickui#menu#install('&Sessions', [
+			\ ["&Save Session As...", 'call SaveSessionWithPrompt()', "Save the current session"],
+		\ ])
+		
+		if g:last_session != ''
 			call quickui#menu#install('&Sessions', [
-				\ ["&Save As...", 'call SaveSessionWithPrompt()', "Save the current session"],
+				\ ["&Load Last Session", 'call LoadSession( "' . g:last_session . '" )', "Load the session \"" . g:last_session . "\""],
 			\ ])
-			
-			if g:last_session != ''
+		endif
+		
+		let session_list = ProduceSessionList()
+		if len(session_list) > 0
+			call quickui#menu#install('&Sessions', [
+				\ ["--"],
+				\ ["&Remove Session...", 'call RemoveSessionWithList()', "Remove a session"],
+				\ ["--"],
+			\ ])
+			for session in session_list
 				call quickui#menu#install('&Sessions', [
-					\ ["&Load Last", 'call LoadSession( "' . g:last_session . '" )', "Load the session \"" . g:last_session . "\""],
+					\ [session, 'call LoadSession("' . session . '")', "Load session \"" . session . "\""],
 				\ ])
-			endif
-			
-			let session_list = ProduceSessionList()
-			if len(session_list) > 0
-				call quickui#menu#install('&Sessions', [
-					\ ["--"],
-					\ ["&Remove...", 'call RemoveSessionWithList()', "Remove a session"],
-					\ ["--"],
-				\ ])
-				for session in session_list
-					call quickui#menu#install('&Sessions', [
-						\ [session, 'call LoadSession("' . session . '")', "Load session \"" . session . "\""],
-					\ ])
-				endfor
-			endif
-			
-			call quickui#menu#change_weight('&Sessions', 200)
+			endfor
+		endif
+		
+		call quickui#menu#change_weight('&Sessions', 300)
 		"endif
+	endfunction
+	
+	function! SaveBookmarkWithPrompt()
+		let name = input('Enter bookmark name: ', '')
+		if name != ""
+			" Make sure name has no spaces
+			let name = substitute(name, ' ', '_', 'g')
+		else
+			echo "No bookmark name provided"
+		endif
+		
+		" Ask for path
+		let path = input('Enter bookmark path: ', expand('%:p:h'))
+		if path != ""
+			" Make sure path exists
+			if !isdirectory(path)
+				echo "Path does not exist"
+				return
+			else
+				" Remove
+				call AddNERDTreeBookmark( name, path )
+				" Rebuild menu
+				call AddNERDTreeList()
+			endif
+		else
+			echo "No bookmark path provided"
+		endif
+	endfunction
+	
+	function! RemoveBookmarkWithList()
+		let bookmarks = ProduceNERDTreeBookmarksList()
+		let linelist = []
+		let index = 0
+		for bookmark in keys(bookmarks)
+			let index += 1
+			if index < 10
+				let linelist += [["&" . index . ". " .bookmark, bookmark]]
+			else
+				let linelist += [[index . ". " .bookmark, bookmark]]
+			endif
+		endfor
+		" restore last position in previous listbox
+		let opts = {'title': 'Select a bookmark to remove'}
+		let l:selection = quickui#listbox#inputlist(linelist, opts)
+		if l:selection == -1
+			echo "No bookmark selected"
+			return
+		endif
+		
+		" Ask if user is sure
+		let question = "Are you sure you want to remove the bookmark:\n\"" . linelist[l:selection][1] . "\"?"
+		let choices = "&Yes\n&No"
+		let choice = quickui#confirm#open(question, choices, 2, 'Confirm')
+		if choice == 1
+			" Remove the bookmark
+			call RemoveNERDTreeBookmark( linelist[l:selection][1] )
+			" Rebuild menu
+			call AddNERDTreeList()
+		else
+			echo "No bookmark removed"
+		endif
+	endfunction
+	
+	function! AddNERDTreeList()
+		call quickui#menu#clear('&Explorer')
+		
+		call quickui#menu#install('&Explorer', [
+			\ [ "&Open File Explorer\t%{LeaderKey()}+o", 'NERDTreeFocus' ],
+			\ [ "&Find Current File\t%{LeaderKey()}+f", 'NERDTreeFind', 'Find the current file' ],
+			\ [ "--", '' ],
+			\ [ "Change &Directory\t%{LeaderKey()}+c+d", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
+		\ ])
+		
+		call quickui#menu#install('&Explorer', [
+			\ ["--", ''],
+			\ ["&Add Bookmark...", 'call SaveBookmarkWithPrompt()', 'Add a bookmark'],
+			\ ["&Edit Bookmarks", 'call g:NERDTreeBookmark.Edit()', 'Edit the bookmarks file'],
+			\ ["--", ''],
+			\ ["&Remove Bookmark...", 'call RemoveBookmarkWithList()', 'Remove a bookmark'],
+		\ ])
+		
+		let bookmarks = ProduceNERDTreeBookmarksList()
+		if len(bookmarks) > 0
+			call quickui#menu#install('&Explorer', [
+				\ ["--"],
+			\ ])
+			for bookmark in keys(bookmarks)
+				call quickui#menu#install('&Explorer', [
+					\ [bookmark, 'NERDTreeFromBookmark ' . bookmarks[bookmark], 'Open bookmarked directory'],
+				\ ])
+			endfor
+		endif
+		
+		call quickui#menu#change_weight('&Explorer', 200)
 	endfunction
 	
 	" Buffer menu
@@ -122,14 +216,30 @@ function! s:plugin_settings()
 		\ [ "&Close\t%{LeaderKey()}+q", 'bp! | bd! #' ],
 		\ [ "Reopen Las&t\t%{LeaderKey()}+t", 'e#' ],
 		\ [ "--", '' ],
+		\ [ "Close Scratch Buffers", 'call CloseUnmodifiedBuffers()', 'Close all unmodified scratch buffers' ],
+		\ [ "--", '' ],
 		\ [ "Next\t%{LeaderKey()}+l\\%{LeaderKey()}+k", 'bnext' ],
 		\ [ "Previous\t%{LeaderKey()}+h\\%{LeaderKey()}+j", 'bprevious' ],
 		\ [ "--", '' ],
-		\ [ "&List All Buffers\t%{LeaderKey()}+lb", 'CtrlPBuffer' ],
+		\ [ "&List All Buffers\t%{LeaderKey()}+b", 'Buffers' ],
 		\ [ "--", '' ],
 		\ [ "Save All", 'wa' ],
 		\ [ "Close All", 'qa' ],
 	\ ], 100)
+	
+	
+	" NetRw menu or NERDTree
+	if exists('g:enabled_nerdtree') && g:enabled_nerdtree == 1
+		" NERDTree
+		call AddNERDTreeList()
+	else
+		" NetRw
+		call quickui#menu#install('&Explorer', [
+			\ [ "&Open File Explorer\t%{LeaderKey()}+o", 'call ToggleOrFocusLexplore()' ],
+			\ [ "--", '' ],
+			\ [ "Change &Directory\t%{LeaderKey()}+c+d", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
+		\ ], 200)
+	endif
 	
 	" Sessions menu
 	if exists('g:enabled_sessions') && g:enabled_sessions == 1
@@ -137,19 +247,12 @@ function! s:plugin_settings()
 		call AddSessionList()
 	endif
 	
-	" NetRw menu
-	call quickui#menu#install('&NetRw', [
-		\ [ "&Open Explorer\t%{LeaderKey()}+o", 'call ToggleOrFocusLexplore()' ],
-		\ [ "--", '' ],
-		\ [ "Change &Directory\t%{LeaderKey()}+cd", 'cd %:p:h | pwd', 'Change directory to the current buffer' ],
-	\ ], 300)
-	
 	" Window menu
 	call quickui#menu#install('&Window', [
-		\ [ "&Split Horizontal\t\Ctrl+ws", 'split' ],
-		\ [ "Split &Vertical\tCtrl+wv", 'vsplit' ],
+		\ [ "&Split Horizontal\t\Ctrl+w+s", 'split' ],
+		\ [ "Split &Vertical\tCtrl+w+v", 'vsplit' ],
 		\ [ "--", '' ],
-		\ [ "&Close\t\Ctrl+wq", 'close' ],
+		\ [ "&Close\t\Ctrl+w+q", 'close' ],
 		\ [ "Close &All", 'qa' ],
 		\ [ "--", '' ],
 		\ [ "Next", 'wincmd w' ],
@@ -172,13 +275,64 @@ function! s:plugin_settings()
 		\ [ "Make &Window Terminal", 'terminal ++curwin', "Convert the current window into a terminal" ],
 	\ ], 500)
 	
-	" Copilot menu
-	if exists('g:enabled_copilot') && g:enabled_copilot == 1
-		call quickui#menu#install('&Copilot', [
-			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
-			\ ["--", ''],
-			\ ["Show Suggestion &Panel\t%{LeaderKey()}+cp", 'Copilot panel'],
+	" Fzf/Find menu
+	if exists('g:enabled_fzf') && g:enabled_fzf == 1
+		function! CommandHistoryQuery()
+			let query = input("query: ")
+			if query != ""
+				Locate query
+			endif
+		endfunction
+		
+		call quickui#menu#install('&Find', [
+			\ ["Find &Files\t%{LeaderKey()}+p\tCtrl+p", 'call FindFilesInCurrentDir()', "Files in the current directory"],
+			\ ["Find &Buffers\t%{LeaderKey()}+b", 'Buffers', "Currently open buffers"],
+			\ ["Find L&ines", 'Lines', "Lines across all open buffers"],
+			\ ["Find Buffer &Lines", 'BLines', "Lines in the current buffer"],
+			\ ["--", ""],
+			\ ["Find Commands", 'Commands', "All available commands"],
+			\ ["Find Command History", 'History:', "Executed command history"],
+			\ ["Find Command Output", 'call CommandHistoryQuery()', "Output of a command"],
+			\ ["--", ""],
+			\ ["Find File History", 'History', "v:oldfiles and open buffers"],
+			\ ["Find Search History", 'History/', "Search history"],
+			\ ["Find Jump History", 'Jumps', "Position jump history"],
+			\ ["--", ""],
+			\ ["Find Normal Mappings", 'call fzf#vim#maps("n", 0)', "Normal mode mappings"],
+			\ ["Find Insert Mappings", 'call fzf#vim#maps("i", 0)', "Insert mode mappings"],
+			\ ["Find Visual Mappings", 'call fzf#vim#maps("v", 0)', "Visual mode mappings"],
+			\ ["Find Command Mappings", 'call fzf#vim#maps("c", 0)', "Command mode mappings"],
+			\ ["Find Terminal Mappings", 'call fzf#vim#maps("t", 0)', "Terminal mode mappings"],
+			\ ["--", ""],
+			\ ["Find Marks", 'Marks', "Marks created by pressing m. Press ' {symbol} to jump to a mark"],
+			\ ["Find Windows", 'Windows', "Windows"],
+			\ ["Find Changelist", 'Changes', "Changelist across all open buffers"],
+			\ ["Find Colors Schemes", 'Colors', "Search for color schemes"],
+			\ ["Find File Types", 'Filetypes', "File types"],
 		\ ], 600)
+	endif
+	
+	" Fugitive / Git menu
+	if exists('g:enabled_fugitive') && g:enabled_fugitive == 1
+		call quickui#menu#install('&Git', [
+			\ ["&Open Git", 'Git', "Open the Git status window"],
+			\ ["--", ""],
+			\ ["Open &Difference", 'Gdiffsplit', "Diff staged version of the file side by side with the working tree version"],
+			\ ["Open Git &Blame", 'Git blame', "Blame the current file"],
+			\ ["Open Git &Log", 'Gclog', "Load commit history into the quickfix list"],
+			\ ["--", ""],
+		\ ])
+		
+		if exists('g:enabled_fzf') && g:enabled_fzf == 1
+			call quickui#menu#install('&Git', [
+				\ ["Find Git &Files", 'GFiles', "Git files (git ls-files)"],
+				\ ["Find Git &Status Files", 'GFiles?', "Git files (git status)"],
+				\ ["Find Git &Commits", 'Commits', "Git commits"],
+				\ ["Find Git B&uffer Commits", 'BCommits', "Git commits for the current buffer; visual-select lines to track changes in the range"],
+			\ ])
+		endif
+		
+		call quickui#menu#change_weight('&Git', 700)
 	endif
 		
 	" If the LSP server is installed, add the LSP menu
@@ -200,7 +354,7 @@ function! s:plugin_settings()
 			\ ["%{LspRunningForBuffer()==1? 'S&top':'S&tart'} LSP", 'call LspToggleState()'],
 			\ ["%{LspRunningForBuffer()==1? '&Update':'&Install'} LSP Server", 'LspInstallServer'],
 			\ ["&Manage LSP Servers", 'LspManageServers'],
-		\ ],700)
+		\ ],800)
 		
 		" LSP context menu
 		let g:context_menu_k = [
@@ -232,25 +386,23 @@ function! s:plugin_settings()
 		" LSP not installed
 		call quickui#menu#install('&LSP', [
 			\ ['&LSP not installed', ''],
-		\ ],700)
+		\ ],800)
 	endif
 	
+	" Copilot menu
+	if exists('g:enabled_copilot') && g:enabled_copilot == 1
+		call quickui#menu#install('&Copilot', [
+			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
+			\ ["--", ''],
+			\ ["Show Suggestion &Panel\t%{LeaderKey()}+c+p", 'Copilot panel'],
+		\ ], 900)
+	endif
+
 	" Options menu
 	call quickui#menu#install('&Options', [
 		\ ["&Edit Vim Configuration", 'Settings', "Edit the Vim configuration file"],
 		\ ["&Reload Vim Configuration", 'ApplySettings', "Reload the Vim configuration file"],
 		\ ["--", ''],
 		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
-	\ ],800)
-	
-	" Make sure input text is readable by settings the input text color at vim enter
-	function! g:QuickDefaultInputColor()
-		hi! link QuickInput PmenuSel
-		hi! link QuickCursor Search
-		hi! link QuickVisual PmenuSbar
-	endfunction
-	augroup QuickDefaultInput
-		autocmd!
-		autocmd VimEnter * call g:QuickDefaultInputColor()
-	augroup END
+	\ ],1000)
 endfunction

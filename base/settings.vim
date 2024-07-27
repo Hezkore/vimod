@@ -13,6 +13,9 @@ set langmenu=en_US.UTF-8
 " Enable filetype detection, plugins, and indentation
 filetype plugin indent on
 
+" Set the OS clipboard as Vim's clipboard
+set clipboard=unnamed
+
 " Highlight the current line
 set cursorline
 
@@ -27,6 +30,9 @@ set numberwidth=6
 
 " Always show the tabline
 set showtabline=2
+
+" Always show the status line
+set laststatus=2
 
 " Show a vertical line at the 80th and 120th columns
 set colorcolumn=80,120

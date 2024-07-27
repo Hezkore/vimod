@@ -1,8 +1,5 @@
 " Custom statusline
 
-" Always show the status line at the bottom
-set laststatus=2
-
 " Function to get the full name of the current mode
 function! ModeFullName()
 	let mode_name = {
@@ -32,12 +29,13 @@ endfunction
 " Set the statusline based on if the window is active or not
 augroup StatusLine
 	autocmd!
-	autocmd WinEnter * setlocal statusline=%!ActiveStatusLine()
+	"autocmd WinEnter * setlocal statusline=%!ActiveStatusLine()
 	autocmd WinLeave * setlocal statusline=%!InactiveStatusLine()
 	autocmd BufEnter * setlocal statusline=%!ActiveStatusLine()
 	autocmd BufLeave * setlocal statusline=%!InactiveStatusLine()
 augroup END
 set statusline=%!ActiveStatusLine()
+	
 
 " Function for setting an inactive statusline
 function! InactiveStatusLine()
@@ -68,12 +66,12 @@ endfunction
 " Function for setting the file information in the statusline
 function! StatusLineFile()
 	let s:statuslinefile = '%(%w %)'
-	let s:statuslinefile .= '%n:%t%<'
+	let s:statuslinefile .= '%{buflisted(bufnr("%")) ? printf("%d:%s", bufnr("%"), expand("%:t") != "" ? expand("%:t") : "[No Name]") : ""}'
 	"let s:statuslinefile .= '%m'
 	let s:statuslinefile .= '%(%{(&readonly || !&modifiable) ? "[-]" : ""}%)'
 	let s:statuslinefile .= '%(%{&modified?"[+]":""}%)'
 	let s:statuslinefile .= '%='
-	let s:statuslinefile .= '%(%y %)'
+	let s:statuslinefile .= '%{buflisted(bufnr("%")) ? &filetype : ""} '
 	
 	return s:statuslinefile
 endfunction
@@ -85,13 +83,19 @@ function! StatusLineInfo()
 	let s:statuslineinfo .= '%([%{&fileformat}] %)'
 	if exists('g:enabled_lsp') && g:enabled_lsp == 1
 		try
-			let s:statuslineinfo .= '%(%{&modifiable==1? (LspRunningForBuffer()==1? "LSP[".LspStatusInfo()."]":"LSP[off]") : ""} %)'
+			let s:statuslineinfo .= '%(%{&modifiable==1? (LspRunningForBuffer()==1? "LSP[".LspStatusInfo()."]":"") : ""} %)'
 		catch
 		endtry
 	endif
 	if exists('g:enabled_copilot') && g:enabled_copilot == 1
 		try
-			let s:statuslineinfo .= '%(%{&readonly==0? (copilot#Enabled()==1? "Copilot[on]":"Copilot[off]") : ""} %)'
+			let s:statuslineinfo .= '%(%{&readonly==0? (copilot#Enabled()==1? "Copilot[on]":"") : ""} %)'
+		catch
+		endtry
+	endif
+	if exists('g:enabled_fugitive') && g:enabled_fugitive == 1 && exists('*FugitiveStatusline')
+		try
+			let s:statuslineinfo .= '%(%{CustomFugitiveStatusline()} %)'
 		catch
 		endtry
 	endif
@@ -107,3 +111,5 @@ function! StatusLinePos()
 	
 	return s:statuslineending
 endfunction
+
+" Function for getting %Y

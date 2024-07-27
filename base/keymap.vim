@@ -24,10 +24,32 @@ nnoremap <silent> <expr> <leader>gb (v:count > 1 ? ':buffer ' . v:count : ':bnex
 nmap <silent> <leader>n :enew<CR>
 
 " Leader q to close the current buffer
-nmap <silent> <leader>q :bp! <BAR> bd! #<CR>
+function! s:CloseBuffer()
+	try
+		execute 'bp! | bd! #'
+	catch
+		"echo "Cannot close the last buffer"
+		" Create a new scratch buffer as the first buffer
+		execute 'enew'
+		" Close the previous buffer
+		try
+			execute 'bd! #'
+		catch
+			"echo "Cannot close the last buffer"
+		endtry
+	endtry
+endfunction
+nmap <silent> <leader>q :call <SID>CloseBuffer()<CR>
 
 " Leader t to reopen the last (non-scratch) buffer
-nmap <silent> <leader>t :e#<CR>
+function! s:ReopenLastBuffer()
+	try
+		execute 'e#'
+	catch
+		echo "No previous buffer"
+	endtry
+endfunction
+nmap <silent> <leader>t :call <SID>ReopenLastBuffer()<CR>
 
 " Leader cd to change the working directory to the current buffer's directory
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
@@ -37,15 +59,22 @@ if exists('g:enabled_copilot')
 	nnoremap <silent> <leader>cp <cmd>Copilot panel<CR>
 endif
 
-if exists('g:enabled_ctrlp')
+if exists('g:enabled_fzf')
 	" Leader lb to list all buffers
-	nnoremap <silent> <leader>b :CtrlPBuffer<CR>
-	" Leader p to open CtrlP
-	nnoremap <silent> <leader>p :CtrlP .<CR>
+	nnoremap <silent> <leader>b :Buffers<CR>
+	" Leader p to open fzf file search
+	nnoremap <silent> <leader>p :call FindFilesInCurrentDir()<CR>
 endif
 
-" Leader o toggles or focuses the Lexplore
-nnoremap <silent> <leader>o :call ToggleOrFocusLexplore()<CR>
+if exists('g:enabled_nerdtree') && g:enabled_nerdtree == 1
+	" Leader o toggles or focuses the NERDTree
+	nnoremap <silent> <leader>o :NERDTreeFocus<CR>
+	" Leader f to open NERDTree on the current file
+	nnoremap <silent> <leader>f :NERDTreeFind<CR>
+else
+	" Leader o toggles or focuses the Lexplore
+	nnoremap <silent> <leader>o :call ToggleOrFocusLexplore()<CR>
+endif
 
 " Extended key mappings
 function! VIModExtendedKeys()
@@ -82,9 +111,9 @@ function! VIModExtendedKeys()
 		endif
 	endif
 	
-	" Ctrl p to open CtrlP
-	if exists('g:enabled_ctrlp')
-		nnoremap <silent> <C-p> :CtrlP .<CR>
+	if exists('g:enabled_fzf')
+		" Ctrl p to open fzf file search
+		nnoremap <silent> <C-p> :call FindFilesInCurrentDir()<CR>
 	endif
 endfunction
 command! VIModKeys call VIModExtendedKeys()
