@@ -14,8 +14,8 @@ endif
 " Settings that can be set before the plugin is loaded
 let g:lsp_diagnostics_enabled = 1
 
-let g:asyncomplete_auto_popup = 1
-let g:asyncomplete_popup_delay = 500
+let g:asyncomplete_auto_popup = get(g:, 'asyncomplete_auto_popup', 0)
+let g:asyncomplete_popup_delay = 0
 let g:asyncomplete_min_chars = 0
 let g:asyncomplete_auto_completeopt = 0
 
@@ -73,7 +73,7 @@ let g:lsp_diagnostics_virtual_text_prefix = ' <- '
 let g:lsp_preview_float = 1
 let g:lsp_preview_autoclose = 0
 let g:lsp_preview_doubletap = [function('lsp#ui#vim#output#focuspreview')]
-"let g:lsp_preview_fixup_conceal = 0
+let g:lsp_preview_fixup_conceal = 0
 let g:lsp_peek_alignment = 'center'
 "let g:lsp_preview_max_width = 0
 "let g:lsp_preview_max_height = 0
@@ -82,7 +82,7 @@ let g:lsp_signature_help_enabled = 1
 let g:lsp_signature_help_delay = 250
 "let g:lsp_show_workspace_edits = 0
 "let g:lsp_fold_enabled = 0
-"let g:lsp_hover_conceal = 0
+let g:lsp_hover_conceal = 1
 "let g:lsp_hover_ui = 0
 "let g:lsp_ignorecase = 0
 "let g:lsp_semantic_enabled = 0
