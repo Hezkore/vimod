@@ -5,12 +5,13 @@ VIMod _(VIM + Vemod)_ is my personal [Vim 9.0+](https://github.com/vim/vim) conf
 VIMod is designed to complement any existing Vim setup, but works equally well on a fresh install!\
 If you ever decide to remove VIMod, your Vim setup will return to its original state.
 
-Learn more about VIMod on the [Wiki](https://github.com/Hezkore/vimod/wiki).
+![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
+<small>_VIMod and the Quick UI, reachable by pressing <kbd>Space</kbd>._</small>
+
+Learn more about VIMod, and how to use it, on the [Wiki](https://github.com/Hezkore/vimod/wiki).
 
 <small>_Never used Vim before?_\
 _Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to get started._</small>
-
-![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
 
 ## Install
 1. Copy VIMod to your Vim configuration directory.
@@ -44,7 +45,9 @@ OS specific instructions:
 	```
 </details>
 
-Make sure to read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how to use VIMod.
+To get the full VIMod experience, make sure to enable the [Extended Keymaps](https://github.com/Hezkore/vimod/wiki#extended-keymaps).
+
+Read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how to use VIMod.
 
 ## Troubleshooting
 If you are unsure where your vimrc file is located, run the following command in Vim: `:echo $MYVIMRC`
