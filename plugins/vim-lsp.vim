@@ -138,13 +138,38 @@ function! LspToggleState()
 	endif
 endfunction
 
-"function! ManageOrInstallLspServers()
-"	if LspRunningForBuffer() == 1
-"		LspManageServers
-"	else
-"		LspInstallServer
-"	endif
-"endfunction
+let s:lsp_settings_cache = {}
+
+function! LoadLSPSettings()
+	" Read and parse the settings.json file if it hasn't been loaded yet
+	if empty(s:lsp_settings_cache)
+		let l:settings_path = expand(g:vimfiles . '/plugged/vim-lsp-settings/settings.json')
+		
+		if filereadable(l:settings_path)
+			let l:settings_content = readfile(l:settings_path)
+			let l:settings_json = join(l:settings_content, "\n")
+			let s:lsp_settings_cache = json_decode(l:settings_json)
+		else
+			let s:lsp_settings_cache = {}
+		endif
+	endif
+endfunction
+
+function! LspAvailableForBuffer()
+	return LspAvailableFor(&filetype)
+endfunction
+
+function! LspAvailableFor(filetype)
+	" Load the settings if not already loaded
+	call LoadLSPSettings()
+		
+	" Check if the filetype exists and has child nodes
+	if has_key(s:lsp_settings_cache, a:filetype) && !empty(s:lsp_settings_cache[a:filetype])
+		return 1
+	endif
+
+	return 0
+endfunction
 
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
@@ -154,35 +179,8 @@ function! s:plugin_settings()
 		setlocal omnifunc=lsp#complete
 		"setlocal signcolumn=yes
 		if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-		"nmap <buffer> gd <plug>(lsp-definition)
-		"nmap <buffer> gs <plug>(lsp-document-symbol-search)
-		"nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-		"nmap <buffer> gr <plug>(lsp-references)
-		"nmap <buffer> gi <plug>(lsp-implementation)
-		"nmap <buffer> gt <plug>(lsp-type-definition)
-		"nmap <buffer> <leader>rn <plug>(lsp-rename)
-		"nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-		"nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-		"nnoremap <buffer> K <plug>(lsp-hover)
-		"nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-		"nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-		
-		"let g:lsp_format_sync_timeout = 1000
-		"autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-		
+			
 		" Close completion menu when completion is done
 		autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-			
-		" refer to doc to add more commands
 	endfunction
-	
-	"function! s:on_textDocumentDiagnostics(x) abort
-	"	echom 'Diagnostics for ' . a:x['server'] . ' ' . json_encode(a:x['response'])
-	"endfunction
-	"
-	"au User lsp_setup call lsp#callbag#pipe(
-	"	\ lsp#stream(),
-	"	\ lsp#callbag#filter({x-> has_key(x, 'response') && !has_key(x['response'], 'error') && get(x['response'], 'method', '') == 'textDocument/publishDiagnostics'}),
-	"	\ lsp#callbag#subscribe({ 'next':{x->s:on_textDocumentDiagnostics(x)} }),
-	"\ )
 endfunction

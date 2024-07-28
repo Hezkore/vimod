@@ -83,7 +83,7 @@ function! StatusLineInfo()
 	let s:statuslineinfo .= '%([%{&fileformat}] %)'
 	if exists('g:enabled_lsp') && g:enabled_lsp == 1
 		try
-			let s:statuslineinfo .= '%(%{&modifiable==1? (LspRunningForBuffer()==1? "LSP[".LspStatusInfo()."]":"") : ""} %)'
+			let s:statuslineinfo .= '%(%{&modifiable==1? (LspRunningForBuffer()==1? "LSP[".LspStatusInfo()."]" : (LspAvailableForBuffer()==1? "LSP[avail]" : "")) : ""} %)'
 		catch
 		endtry
 	endif
