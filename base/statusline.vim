@@ -89,7 +89,7 @@ function! StatusLineInfo()
 	endif
 	if exists('g:enabled_copilot') && g:enabled_copilot == 1
 		try
-			let s:statuslineinfo .= '%(%{&readonly==0? (copilot#Enabled()==1? "Copilot[on]":"") : ""} %)'
+			let s:statuslineinfo .= '%(%{&readonly==0? (CopilotReadyToUse()==1?"Copilot[on]":"") : ""} %)'
 		catch
 		endtry
 	endif

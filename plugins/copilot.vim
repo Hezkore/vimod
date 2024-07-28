@@ -28,6 +28,25 @@ function! TriggerCopilotSuggestion()
 	"execute "call copilot#Suggest()"
 endfunction
 
+function! CopilotReadyToUse()
+	" TODO stop from freezing forever
+	return 0
+	
+	if copilot#Enabled()
+		if empty(copilot#Client().StartupError())
+			if copilot#RunningClient() != v:null
+				" This will freeze Vim forever, do not use!
+				let status = copilot#Call('checkStatus', {})
+				if status ==# 'Copilot: Ready'
+					return 1
+				endif
+			endif
+		endif
+	endif
+
+	return 0
+endfunction
+
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()

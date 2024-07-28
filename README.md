@@ -13,11 +13,9 @@ _Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to ge
 ![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
 
 ## Install
-Just copy VIMod to your Vim configuration directory and add the runtime to your vimrc file.\
-_Clone with Git if you want to easily update VIMod in the future._
-
-Launch Vim normally.
-
+1. Copy VIMod to your Vim configuration directory.
+	* _Clone with Git if you want to easily update VIMod in the future._
+2. Add the runtime to the top of your vimrc file.
 
 OS specific instructions:
 <details>
@@ -47,6 +45,16 @@ OS specific instructions:
 </details>
 
 Make sure to read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how to use VIMod.
+
+## Troubleshooting
+If you are unsure where your vimrc file is located, run the following command in Vim: `:echo $MYVIMRC`
+
+If you are unsure if the runtime was added correctly, look for the VIMod version number in the lower left corner when starting Vim.\
+If it doesn't say `VIMod vX.X.X`, the runtime was not added correctly.
+
+VIMod will install and manage all plugins and dependencies automatically when you start Vim for the first time.\
+The install screen will automatically close when the installation is complete, so just sit tight and wait for it to finish.
+
 ## Updating
 
 ### VIMod
