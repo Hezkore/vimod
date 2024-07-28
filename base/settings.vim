@@ -179,6 +179,9 @@ set noswapfile
 " Don't redraw while executing macros
 set lazyredraw
 
+" Make terminal refreshing fast, instead refresh character for character
+set ttyfast
+
 " Always try to show a paragraph's last line
 set display+=lastline
 
