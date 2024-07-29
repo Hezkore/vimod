@@ -54,6 +54,9 @@ nmap <silent> <leader>t :call <SID>ReopenLastBuffer()<CR>
 " Leader cd to change the working directory to the current buffer's directory
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
+" Leader / (search) to clear the search highlight
+nnoremap <silent> <leader>/ :nohlsearch<CR>
+
 " Leader cp to open Copilot panel
 if exists('g:enabled_copilot')
 	nnoremap <silent> <leader>cp <cmd>Copilot panel<CR>

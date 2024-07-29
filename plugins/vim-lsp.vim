@@ -184,8 +184,9 @@ endfunction
 function! s:on_lsp_buffer_enabled() abort
 	setlocal omnifunc=lsp#complete
 	"setlocal signcolumn=number
-	if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 	
+	if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+		
 	" Close completion menu when completion is done
 	autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 endfunction
@@ -199,4 +200,8 @@ augroup END
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()
+	
+	set foldmethod=expr
+	\ foldexpr=lsp#ui#vim#folding#foldexpr()
+	\ foldtext=lsp#ui#vim#folding#foldtext()
 endfunction

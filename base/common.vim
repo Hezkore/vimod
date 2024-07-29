@@ -59,3 +59,27 @@ function! GetFileType()
 	let s:filetype = &filetype
 	return toupper(s:filetype[0]) . s:filetype[1:]
 endfunction
+
+" Function for fold toggling
+function! ToggleFold()
+	try
+		execute 'normal! zA'
+	catch
+	endtry
+endfunction
+
+" Function for opening all folds
+function! OpenAllFolds()
+	try
+		execute 'normal! zR'
+	catch
+	endtry
+endfunction
+
+" Function for closing all folds
+function! CloseAllFolds()
+	try
+		execute 'normal! zM'
+	catch
+	endtry
+endfunction

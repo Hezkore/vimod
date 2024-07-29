@@ -14,7 +14,7 @@ set langmenu=en_US.UTF-8
 filetype plugin indent on
 
 " Set the OS clipboard as Vim's clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " Highlight the current line
 set cursorline
@@ -82,7 +82,7 @@ set noshowmode
 set wildmenu
 set wildmode=longest,full
 set wildoptions=pum
-set wildignore=*.o,*~,*.pyc
+set wildignore=*.o,*~,*.pyc,*.swp,*.bak,*.class
 if has("win16") || has("win32")
 	set wildignore+=.git\*,.hg\*,.svn\*
 else
@@ -146,6 +146,9 @@ set foldmethod=indent
 
 " Disable folding by default
 set nofoldenable
+
+" Do not fold by default
+set foldlevelstart=20
 
 " Add a column to show the fold level
 set foldcolumn=1
