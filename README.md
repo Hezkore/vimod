@@ -49,6 +49,10 @@ To get the full VIMod experience, make sure to enable the [Extended Keymaps](htt
 
 Read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how to use VIMod.
 
+Get a local copy of the wiki pages:
+```shell
+git clone https://github.com/Hezkore/vimod.wiki.git
+```
 ## Troubleshooting
 If you are unsure where your vimrc file is located, run the following command in Vim: `:echo $MYVIMRC`
 
