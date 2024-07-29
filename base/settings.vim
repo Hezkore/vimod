@@ -222,7 +222,7 @@ set diffopt=vertical
 set mousehide
 
 " Always show the signcolumn
-set signcolumn=yes
+set signcolumn=number
 
 " Options for restoring sessions
 set sessionoptions-=options

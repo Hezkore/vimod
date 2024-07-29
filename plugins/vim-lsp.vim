@@ -31,8 +31,14 @@ let g:lsp_diagnostics_virtual_text_align = 'after'
 " Disable inlay hints, such as parameter names
 let g:lsp_inlay_hints_enabled = 0
 
+" Highlight references to the symbol under the cursor
+let g:lsp_document_highlight_enabled = 1
+let g:lsp_document_highlight_delay = 1300
+
+let g:lsp_use_native_client = 1
+
 let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_diagnostics_echo_delay = 150
+let g:lsp_diagnostics_echo_delay = 0 " Cursor flicker at higher
 
 let g:lsp_diagnostics_float_cursor = 0
 let g:lsp_diagnostics_float_delay = 300
@@ -43,11 +49,16 @@ let g:lsp_diagnostics_highlights_delay = 500
 "let g:lsp_diagnostics_signs_enabled = 0
 let g:lsp_diagnostics_signs_delay = 500
 
+
 let g:lsp_diagnostics_signs_error = {'text': 'E>'}
 let g:lsp_diagnostics_signs_warning = {'text': 'W>'}
 let g:lsp_diagnostics_signs_information = {'text': 'I>'}
 
+let g:lsp_document_code_action_signs_enabled = 0
 let g:lsp_document_code_action_signs_hint = {'text': 'A>'}
+let g:lsp_document_code_action_signs_delay = 0 " Cursor flicker at higher
+"let g:lsp_document_code_action_signs_hint = 0
+"let g:lsp_document_code_action_signs_priority = 0
 
 "let g:lsp_diagnostics_signs_hint = 0
 "let g:lsp_diagnostics_signs_priority = 0
@@ -59,17 +70,12 @@ let g:lsp_diagnostics_virtual_text_prefix = ' <- '
 "let g:lsp_diagnostics_virtual_text_wrap = 0
 "let g:lsp_diagnostics_virtual_text_padding_left = 0
 
-"let g:lsp_document_code_action_signs_enabled = 0
-"let g:lsp_document_code_action_signs_delay = 0
-"let g:lsp_document_code_action_signs_hint = 0
-"let g:lsp_document_code_action_signs_priority = 0
-
 "let g:lsp_preview_keep_focus = 0
-"let g:lsp_use_event_queue = 0
-"let g:lsp_insert_text_enabled = 0
-"let g:lsp_text_edit_enabled = 0
-let g:lsp_document_highlight_enabled = 0
-"let g:lsp_document_highlight_delay = 0
+"let g:lsp_use_event_queue = 1
+
+"let g:lsp_insert_text_enabled = 0 "1
+"let g:lsp_text_edit_enabled = 0 "1
+
 let g:lsp_preview_float = 1
 let g:lsp_preview_autoclose = 0
 let g:lsp_preview_doubletap = [function('lsp#ui#vim#output#focuspreview')]
@@ -78,8 +84,10 @@ let g:lsp_peek_alignment = 'center'
 "let g:lsp_preview_max_width = 0
 "let g:lsp_preview_max_height = 0
 "let g:lsp_float_max_width = 0
+
 let g:lsp_signature_help_enabled = 1
-let g:lsp_signature_help_delay = 250
+let g:lsp_signature_help_delay = 500
+
 "let g:lsp_show_workspace_edits = 0
 "let g:lsp_fold_enabled = 0
 let g:lsp_hover_conceal = 1
@@ -100,6 +108,8 @@ let g:lsp_work_done_progress_enabled = 0
 "let g:lsp_get_supported_capabilities = get(g:, 'lsp_get_supported_capabilities', [function('lsp#default_get_supported_capabilities')])
 "let g:lsp_document_symbol_detail = get(g:, 'lsp_document_symbol_detail', 0)
 "let g:lsp_experimental_workspace_folders = get(g:, 'lsp_experimental_workspace_folders', 0)
+
+"let g:lsp_diagnostics_echo_delay = 0
 
 function! LspRunningForBuffer()
 	let l:server = lsp#get_allowed_servers(bufnr('%'))
@@ -171,16 +181,22 @@ function! LspAvailableFor(filetype)
 	return 0
 endfunction
 
+function! s:on_lsp_buffer_enabled() abort
+	setlocal omnifunc=lsp#complete
+	"setlocal signcolumn=number
+	if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+	
+	" Close completion menu when completion is done
+	autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 " Settings that need to be applied after the plugin is loaded
 autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()
-	
-	function! s:on_lsp_buffer_enabled() abort
-		setlocal omnifunc=lsp#complete
-		"setlocal signcolumn=yes
-		if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-			
-		" Close completion menu when completion is done
-		autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-	endfunction
 endfunction

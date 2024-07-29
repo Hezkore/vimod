@@ -1,5 +1,5 @@
 " LSP - Language Server Protocol support
-let g:enabled_snippets = get(g:, 'enabled_snippets', 0)
+let g:enabled_snippets = get(g:, 'enabled_snippets', 1)
 if g:enabled_snippets
 	" Snippet support
 	Plug 'hrsh7th/vim-vsnip'
