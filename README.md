@@ -24,7 +24,7 @@ OS specific instructions:
 
 1. Clone the VIMod repository to your local machine.
 	```shell
-	git clone https://github.com/hezkore/vimod.git $HOME/vimfiles/vimod
+	git clone https://github.com/hezkore/vimod.git %USERPROFILE%/vimfiles/vimod
 	```
 2. Add the runtime at the top of your `vimrc` file.
 	```vim
