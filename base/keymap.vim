@@ -94,6 +94,7 @@ function! VIModExtendedKeys()
 	inoremap <expr> <tab> pumvisible() ? "\<C-y>" : "\<Tab>"
 	
 	if exists('g:enabled_copilot')
+		" Ctrl x Ctrl g to trigger Copilot suggestion
 		inoremap <expr> <C-x><C-g> pumvisible() ? asyncomplete#cancel_popup() . "\<C-o>:call TriggerCopilotSuggestion()<CR>" : "\<C-o>:call TriggerCopilotSuggestion()<CR>"
 	endif
 	

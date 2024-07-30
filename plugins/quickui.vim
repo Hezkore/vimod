@@ -332,9 +332,17 @@ function! s:plugin_settings()
 			\ ])
 		endif
 		
+		" Add Github gh cli menu, even if gh is not installed
+		call quickui#menu#install('&Git', [
+			\ ["--", ""],
+			\ ["Open &Pull Requests", 'call OpenGithubPullRequests()', "Open the pull requests for the current repository (requires gh)"],
+			\ ["Open &Issues", 'call OpenGithubIssues()', "Open the issues for the current repository (requires gh)"],
+			\ ["Open &Repository", 'call OpenGithubRepository()', "Open the repository for the current file (requires gh)"],
+		\ ])
+		
 		call quickui#menu#change_weight('&Git', 700)
 	endif
-		
+	
 	" If the LSP server is installed, add the LSP menu
 	if exists('g:enabled_lsp') && g:enabled_lsp == 1
 		" LSP quick menu
@@ -409,4 +417,325 @@ function! s:plugin_settings()
 		\ ["--", ''],
 		\ [ "%{&spell? 'Disable':'Enable'} &Spell Checking", 'set spell!', 'Toggle spell checking' ],
 	\ ],1000)
+endfunction
+
+" Helper functions
+
+" Show error message for missing GitHub CLI tool
+function! ShowGithubCliError()
+	"Give the user a link to https://cli.github.com/
+	call quickui#confirm#open("The GitHub CLI tool (gh) must be installed.\n\nDownload from:\nhttps://cli.github.com", "&OK", 0, "Error")
+endfunction
+
+" Function for displaying open pull requests
+function! OpenGithubPullRequests()
+	" Does the user have gh?
+	if !g:has_github_cli
+		call ShowGithubCliError()
+		return
+	endif
+	
+	let pr_list = ProduceGithubPullRequestList()
+	if len(pr_list) == 0
+		echo "No pull requests found"
+		return
+	endif
+	
+	let linelist = []
+	let pr_numbers = []
+	let index = 0
+	for pr in pr_list
+		let index += 1
+		let title = string(pr['title'])
+		let url = string(pr['url'])
+		let number = pr['number']
+		let listTitle = title . " (" . pr['headRefName'] . ") \t" . pr['author']['login']
+		call add(pr_numbers, number)
+		if index < 10
+			call add(linelist, ["&" . index . ". " . listTitle, url])
+		else
+			call add(linelist, [index . ". " . listTitle, url])
+		endif
+	endfor
+
+	" restore last position in previous listbox
+	let opts = {'title': 'Select a pull request to view'}
+	let l:selection = quickui#listbox#inputlist(linelist, opts)
+	if l:selection == -1
+		echo "No pull request selected"
+		return
+	endif
+
+	" Get the pull request number
+	let pr_number = pr_numbers[l:selection]
+
+	" Get the pull request via ProduceGithubPullRequestJson
+	let pr_json = ProduceGithubPullRequestJson(pr_number)
+	let description = has_key(pr_json, 'body') ? pr_json['body'] : "No description provided."
+	let description_lines = split(description, '\n')
+	let cleaned_description_lines = map(description_lines, 'substitute(v:val, "\r", "", "g")')
+
+	" Prepare the content for the confirm dialog
+	let content = [
+		\ "Title: " . pr_json['title'],
+		\ "Author: " . pr_json['author']['login'],
+		\ "",
+		\ "Created At: " . FormatTimestamp(pr_json['createdAt']),
+		\ "Updated At: " . FormatTimestamp(pr_json['updatedAt']),
+		\ "",
+		\ "URL: " . pr_json['url'],
+		\ "Branch: " . pr_json['headRefName'],
+		\ "",
+		\ "Description:"
+	\] + cleaned_description_lines
+
+	" Join the content into a single string for the dialog
+	let choices = "&View Files\n&Close"
+	
+	" Open the confirm dialog and get the user's choice
+	let choice = quickui#confirm#open(content, choices, 0, 'Pull request #' . pr_number)
+
+	" Check the user's choice
+	if choice == 1
+		" User chose "View Files"
+		" Open the diff view to compare the changes
+		call OpenDiffView(pr_number)
+	endif
+endfunction
+
+function! OpenDiffView(pr_number)
+	" Store the pull request number in a global variable
+	let g:pr_number = a:pr_number
+
+	" Get the list of modified files with line changes in the pull request
+	let pr_files_command = 'gh pr view ' . a:pr_number . ' --json files --jq ".files[] | {path: .path, additions: .additions, deletions: .deletions}"'
+	let pr_files_output = system(pr_files_command)
+
+	" Check if the gh command was successful
+	if v:shell_error != 0
+		echo "Error: Unable to get the list of modified files for pull request #" . a:pr_number
+		return
+	endif
+
+	" Clean the JSON output by removing null characters
+	let pr_files_output = substitute(pr_files_output, '\c\%x00', '', 'g')
+
+	" Debug: Print the JSON output
+	echom "JSON Output: " . pr_files_output
+
+	" Convert concatenated JSON objects into a JSON array
+	let pr_files_output = '[' . substitute(pr_files_output, '}\s*{', '},{', 'g') . ']'
+
+	" Parse the JSON output
+	let modified_files = json_decode(pr_files_output)
+
+	" Ensure modified_files is a list
+	if type(modified_files) == type({})
+		let modified_files = [modified_files]
+	elseif type(modified_files) != type([])
+		echo "Error: Unexpected JSON format"
+		return
+	endif
+
+	" Open a small window at the top of the screen to list the modified files
+	top new
+	setlocal buftype=nofile
+	setlocal bufhidden=wipe
+	setlocal noswapfile
+	setlocal nobuflisted
+	call setline(1, ['Select a file to view changes:'] + map(copy(modified_files), 'v:val["path"] . " (+" . string(v:val["additions"]) . "/-" . string(v:val["deletions"]) . ")"'))
+	setfiletype diff
+	file ModifiedFilesList
+	setlocal readonly
+	setlocal nonumber
+	setlocal norelativenumber
+	setlocal signcolumn=no
+
+	" Move the cursor to the first file in the list
+	call cursor(2, 1)
+
+	" Map <Enter> to open the selected file and show changes
+	nnoremap <buffer> <silent> <CR> :call OpenFileDiff()<CR>
+endfunction
+
+function! OpenFileDiff()
+	" Get the current line (file name)
+	let file_line = getline('.')
+
+	" Skip the title line
+	if file_line =~ '^Select a file to view changes:'
+		return
+	endif
+
+	" Extract the actual file name
+	let file_name = matchstr(file_line, '\v^.*\ze\s\(\+\d+\/\-\d+\)$')
+
+	" Get the full diff for the pull request
+	let pr_diff_command = 'gh pr diff ' . g:pr_number
+	let pr_diff_output = system(pr_diff_command)
+
+	" Check if the gh command was successful
+	if v:shell_error != 0
+		echo "Error: Unable to get the diff for pull request #" . g:pr_number
+		return
+	endif
+
+	" Extract the diff section for the selected file
+	let file_diff = []
+	let in_diff_section = 0
+	for line in split(pr_diff_output, "\n")
+		if line =~ '^diff --git a/' . file_name . ' '
+			let in_diff_section = 1
+		elseif line =~ '^diff --git a/' && in_diff_section
+			break
+		endif
+		if in_diff_section
+			call add(file_diff, line)
+		endif
+	endfor
+
+	" Check if a buffer named 'DiffPreview' already exists and delete it
+	let bufnum = bufnr('DiffPreview')
+	if bufnum != -1
+		execute 'bdelete! ' . bufnum
+	endif
+
+	" Open the diff in a new vertical split window to the right
+	vsplit new
+	setlocal buftype=nofile
+	setlocal bufhidden=wipe
+	setlocal noswapfile
+	setlocal nobuflisted
+	" Temporarily disable readonly to set the buffer content
+	setlocal noreadonly
+	call setline(1, file_diff)
+	setfiletype diff
+	file DiffPreview
+	" Re-enable readonly after setting the buffer content
+	setlocal readonly
+endfunction
+
+function! OpenGithubIssues()
+	" Does the user have gh?
+	if !g:has_github_cli
+		call ShowGithubCliError()
+		return
+	endif
+	
+	" List the issues for the current repository
+	let issues_command = 'gh issue list --json number,title,url,author,createdAt,updatedAt'
+	let issues_output = system(issues_command)
+	
+	" Check if the gh command was successful
+	if v:shell_error != 0
+		echo "Error: Unable to get the list of issues for the current repository"
+		return
+	endif
+	
+	" Parse the JSON output
+	let issues = json_decode(issues_output)
+	if len(issues) == 0
+		echo "No pull issues found"
+		return
+	endif
+	
+	" Ensure issues is a list
+	if type(issues) == type({})
+		let issues = [issues]
+	elseif type(issues) != type([])
+		echo "Error: Unexpected JSON format"
+		return
+	endif
+	
+	" Prepare the list of issues for the menu
+	let linelist = []
+	let issue_numbers = []
+	let index = 0
+	for issue in issues
+		let index += 1
+		let title = string(issue['title'])
+		let url = string(issue['url'])
+		let number = issue['number']
+		let listTitle = title . "\t" . issue['author']['login']
+		call add(issue_numbers, number)
+		if index < 10
+			call add(linelist, ["&" . index . ". " . listTitle, url])
+		else
+			call add(linelist, [index . ". " . listTitle, url])
+		endif
+	endfor
+	
+	" restore last position in previous listbox
+	let opts = {'title': 'Select an issue to view'}
+	let l:selection = quickui#listbox#inputlist(linelist, opts)
+	if l:selection == -1
+		echo "No issue selected"
+		return
+	endif
+	
+	" Get the issue number
+	let issue_number = issue_numbers[l:selection]
+	
+	" Get the issue via ProduceGithubIssueJson
+	let issue_json = ProduceGithubIssueJson(issue_number)
+	let description = has_key(issue_json, 'body') ? issue_json['body'] : "No description provided."
+	let description_lines = split(description, '\n')
+	let cleaned_description_lines = map(description_lines, 'substitute(v:val, "\r", "", "g")')
+	
+	" Show a quickui#textbox#open
+	let content = [
+		\ "Title: " . issue_json['title'],
+		\ "Author: " . issue_json['author']['login'],
+		\ "",
+		\ "Created At: " . FormatTimestamp(issue_json['createdAt']),
+		\ "Updated At: " . FormatTimestamp(issue_json['updatedAt']),
+		\ "",
+		\ "URL: " . issue_json['url'],
+		\ "",
+		\ "Description:"
+	\] + cleaned_description_lines
+	
+	let opts = {"close":"button", "title":"Issue #" . issue_number}
+	call quickui#textbox#open(content, opts)
+endfunction
+
+function! OpenGithubRepository()
+	" Does the user have gh?
+	if !g:has_github_cli
+		call ShowGithubCliError()
+		return
+	endif
+	
+	" Get the repository URL
+	let repo_info = system('gh repo view --json url')
+	
+	" Check if the gh command was successful
+	if v:shell_error != 0
+		echo "Error: Unable to get the repository URL"
+		return
+	endif
+	
+	" Parse the JSON output
+	let repo_info = json_decode(repo_info)
+	
+	" Extract the URL from the JSON object
+	let repo_url = repo_info.url
+	
+	" Ensure repo_url is a string
+	if type(repo_url) != type("")
+		echo "Error: Unexpected JSON format"
+		return
+	endif
+	
+	" Detect the operating system and open the URL in the default browser
+	if has('win32') || has('win64')
+		call system('start ' . repo_url)
+	elseif has('macunix')
+		call system('open ' . repo_url)
+	else
+		call system('xdg-open ' . repo_url)
+	endif
+	
+	" Show a message in the command line
+	echo "Opening the repository in the default browser..."
 endfunction

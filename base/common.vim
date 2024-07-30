@@ -83,3 +83,17 @@ function! CloseAllFolds()
 	catch
 	endtry
 endfunction
+
+" Convert an ISO timestamp to a formatted timestamp
+function! FormatTimestamp(iso_timestamp)
+    " Extract date and time components from the ISO 8601 timestamp
+    let l:year = str2nr(strpart(a:iso_timestamp, 0, 4))
+    let l:month = str2nr(strpart(a:iso_timestamp, 5, 2))
+    let l:day = str2nr(strpart(a:iso_timestamp, 8, 2))
+    let l:hour = str2nr(strpart(a:iso_timestamp, 11, 2))
+    let l:minute = str2nr(strpart(a:iso_timestamp, 14, 2))
+    let l:second = str2nr(strpart(a:iso_timestamp, 17, 2))
+
+    " Format the timestamp in a more readable format
+    return printf('%04d-%02d-%02d %02d:%02d:%02d', l:year, l:month, l:day, l:hour, l:minute, l:second)
+endfunction
