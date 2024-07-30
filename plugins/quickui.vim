@@ -399,7 +399,7 @@ function! s:plugin_settings()
 		" LSP not installed
 		call quickui#menu#install('&LSP', [
 			\ ['&LSP not installed', ''],
-		\ ],800)
+		\ ], 800)
 	endif
 	
 	" Copilot menu
@@ -520,10 +520,7 @@ function! OpenDiffView(pr_number)
 
 	" Clean the JSON output by removing null characters
 	let pr_files_output = substitute(pr_files_output, '\c\%x00', '', 'g')
-
-	" Debug: Print the JSON output
-	echom "JSON Output: " . pr_files_output
-
+	
 	" Convert concatenated JSON objects into a JSON array
 	let pr_files_output = '[' . substitute(pr_files_output, '}\s*{', '},{', 'g') . ']'
 
