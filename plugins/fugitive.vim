@@ -27,6 +27,10 @@ endfunction
 " Function for producing a list of current pull requests
 function! ProduceGithubPullRequestList()
 	let s:pr_list = system('gh pr list --json number,title,url,author,headRefName')
+	if v:shell_error != 0
+		echo "Error: Unable to get the pull request list"
+		return []
+	endif
 	let s:pr_list = json_decode(s:pr_list)
 	return s:pr_list
 endfunction
