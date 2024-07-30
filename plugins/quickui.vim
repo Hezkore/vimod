@@ -337,6 +337,7 @@ function! s:plugin_settings()
 			\ ["--", ""],
 			\ ["Open &Pull Requests", 'call OpenGithubPullRequests()', "Open the pull requests for the current repository (requires gh)"],
 			\ ["Open &Issues", 'call OpenGithubIssues()', "Open the issues for the current repository (requires gh)"],
+			\ ["Search Issues", 'call SearchGithubIssues()', "Search for issues in the current repository (requires gh)"],
 			\ ["Open &Repository", 'call OpenGithubRepository()', "Open the repository for the current file (requires gh)"],
 		\ ])
 		
@@ -635,7 +636,7 @@ function! OpenGithubIssues()
 	" Parse the JSON output
 	let issues = json_decode(issues_output)
 	if len(issues) == 0
-		echo "No pull issues found"
+		echo "No issues found"
 		return
 	endif
 	
@@ -673,11 +674,84 @@ function! OpenGithubIssues()
 		return
 	endif
 	
-	" Get the issue number
-	let issue_number = issue_numbers[l:selection]
+	call ShowGithubIssue( issue_numbers[l:selection] )
+endfunction
+
+function! SearchGithubIssues(term='')
+	" Does the user have gh?
+	if !g:has_github_cli
+		call ShowGithubCliError()
+		return
+	endif
 	
+	" Was there a term provided?
+	let search_term = a:term
+	if search_term == ''
+		" Ask the user for a search term
+		let search_term = input('query: ')
+		if search_term == ''
+			echo "No search term provided"
+			return
+		endif
+	endif
+	
+	" Search for the issue
+	let search_command = 'gh issue list --json number,title,url,author,createdAt,updatedAt --search "' . search_term . '"'
+	let search_output = system(search_command)
+	
+	" Check if the gh command was successful
+	if v:shell_error != 0
+		echo "Error: Unable to get the list of issues for the current repository"
+		return
+	endif
+	
+	" Parse the JSON output
+	let issues = json_decode(search_output)
+	if len(issues) == 0
+		echo "No issues found matching the search term"
+		return
+	endif
+	
+	" Ensure issues is a list
+	if type(issues) == type({})
+		let issues = [issues]
+	elseif type(issues) != type([])
+		echo "Error: Unexpected JSON format"
+		return
+	endif
+	
+	" Prepare the list of issues for the menu
+	let linelist = []
+	let issue_numbers = []
+	let index = 0
+	for issue in issues
+		let index += 1
+		let title = string(issue['title'])
+		let url = string(issue['url'])
+		let number = issue['number']
+		let listTitle = title . "\t" . issue['author']['login']
+		call add(issue_numbers, number)
+		if index < 10
+			call add(linelist, ["&" . index . ". " . listTitle, url])
+		else
+			call add(linelist, [index . ". " . listTitle, url])
+		endif
+	endfor
+	
+	" restore last position in previous listbox
+	let opts = {'title': 'Select an issue to view'}
+	let l:selection = quickui#listbox#inputlist(linelist, opts)
+	if l:selection == -1
+		echo "No issue selected"
+		return
+	endif
+	
+	call ShowGithubIssue( issue_numbers[l:selection] )
+endfunction
+
+function! ShowGithubIssue(issue_number)
 	" Get the issue via ProduceGithubIssueJson
-	let issue_json = ProduceGithubIssueJson(issue_number)
+	let issue_json = ProduceGithubIssueJson(a:issue_number)
 	let description = has_key(issue_json, 'body') ? issue_json['body'] : "No description provided."
 	let description_lines = split(description, '\n')
 	let cleaned_description_lines = map(description_lines, 'substitute(v:val, "\r", "", "g")')
@@ -695,7 +769,7 @@ function! OpenGithubIssues()
 		\ "Description:"
 	\] + cleaned_description_lines
 	
-	let opts = {"close":"button", "title":"Issue #" . issue_number}
+	let opts = {"close":"button", "title":"Issue #" . a:issue_number}
 	call quickui#textbox#open(content, opts)
 endfunction
 
