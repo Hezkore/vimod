@@ -11,13 +11,11 @@ autocmd User VIModPlugSettings call s:plugin_settings()
 function! s:plugin_settings()
 	" Only apply the theme is no other colorscheme has been set
 	if !exists('g:colors_name')
-		if has("termguicolors")
-			try
-				set termguicolors
-				colorscheme dracula
-			catch
-				colorscheme darkblue
-			endtry
-		endif
+		try
+			colorscheme dracula
+			set termguicolors
+		catch
+			colorscheme darkblue
+		endtry
 	endif
 endfunction
