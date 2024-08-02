@@ -127,16 +127,23 @@ set smartcase
 " Use Tab for Tabs by default
 set noexpandtab
 
-" Set the number of spaces for a tab character for alignment
+" Set the number of spaces that a tab character represents
 set tabstop=4
 
-" Set the number of spaces to use for auto-indentation for consistency
+" Set the number of spaces that a Tab key press inserts while in Insert mode
+set softtabstop=4
+
+" Set the number of spaces used for each step of (auto)indentation
 set shiftwidth=4
 
 " Enable auto-indentation and smart indentation for code
 set autoindent
 set copyindent
 set smartindent
+
+" Prevent automatic insertion of comment leaders
+"set formatoptions-=c " Don't auto-wrap comments
+set formatoptions-=r " Don't auto-insert comment leader on new line
 
 " When shifting lines, round the indentation to the nearest multiple of "shiftwidth.
 set shiftround

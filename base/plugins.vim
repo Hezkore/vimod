@@ -31,9 +31,6 @@ else
 	endif
 endif
 
-" Initialize vim-plug
-call plug#begin('~/.vim/plugged')
-
 " Plugins
 call plug#begin(g:vimfiles . '/plugged')
 	" Load all plugin configuration files
@@ -42,7 +39,8 @@ call plug#begin(g:vimfiles . '/plugged')
 		"echomsg "Processing plugin " . file
 		execute 'source' file
 	endfor
-	
+
+" This will call `filetype plugin indent on`
 call plug#end()
 
 if exists('g:plug_install')
