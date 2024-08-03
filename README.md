@@ -1,34 +1,32 @@
 # VIMod⚡
 VIMod _(VIM + Vemod)_ is my personal [Vim 9.0+](https://github.com/vim/vim) configuration.
 
-
-VIMod is designed to complement any existing Vim setup, but works equally well on a fresh install!\
+VIMod is designed to complement any existing Vim setup, but works equally well on a fresh Vim install!\
 If you ever decide to remove VIMod, your Vim setup will return to its original state.
 
 ![demo](https://github.com/Hezkore/vimod/blob/main/demo.png?raw=true)
-<small>_VIMod and the Quick UI, reachable by pressing <kbd>Space</kbd>._</small>
+<sup>_VIMod and the Quick UI, reachable by pressing <kbd>Space</kbd>._</sup>
 
-Learn more about VIMod, and how to use it, on the [Wiki](https://github.com/Hezkore/vimod/wiki).
-
-<small>_Never used Vim before?_\
-_Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to get started._</small>
+Learn more about VIMod, and how to use it, on the [Wiki](https://github.com/Hezkore/vimod/wiki).\
+<sub>_Never used Vim before? Read the [new user](https://github.com/Hezkore/vimod/wiki/New-User) guide to get started._</sub>
 
 ## Install
-1. Copy VIMod to your Vim configuration directory.
-	* _Clone with Git if you want to easily update VIMod in the future._
-2. Add the runtime to the top of your vimrc file.
-
+Just download and add the runtime!\
 OS specific instructions:
 <details>
 <summary><b>Windows</b></summary>
 
-1. Clone the VIMod repository to your local machine.
+1. Clone the VIMod repository to your local machine:
 	```shell
 	git clone https://github.com/hezkore/vimod.git %USERPROFILE%/vimfiles/vimod
 	```
-2. Add the runtime at the top of your `vimrc` file.
+2. Add the runtime at the top of your `vimrc` file:
 	```vim
 	runtime vimod/vimod.vim
+	```
+3. Add the optional [extended keymaps](https://github.com/Hezkore/vimod/wiki#extended-keymaps) below the runtime:
+	```vim
+	VIModKeys
 	```
 </details>
 
@@ -43,16 +41,18 @@ OS specific instructions:
 	```vim
 	runtime vimod/vimod.vim
 	```
+3. Add the optional [extended keymaps](https://github.com/Hezkore/vimod/wiki#extended-keymaps) below the runtime:
+	```vim
+	VIModKeys
+	```
 </details>
-
-To get the full VIMod experience, make sure to enable the [Extended Keymaps](https://github.com/Hezkore/vimod/wiki#extended-keymaps).
 
 Read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how to use VIMod.
 
-Get a local copy of the wiki pages:
-```shell
-git clone https://github.com/Hezkore/vimod.wiki.git
-```
+> [!TIP]
+> Get a local copy of the wiki pages:
+> `git clone https://github.com/Hezkore/vimod.wiki.git`
+
 ## Troubleshooting
 If you are unsure where your vimrc file is located, run the following command in Vim: `:echo $MYVIMRC`
 
