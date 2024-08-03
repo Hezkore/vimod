@@ -29,13 +29,10 @@ endfunction
 " Set the statusline based on if the window is active or not
 augroup StatusLine
 	autocmd!
-	"autocmd WinEnter * setlocal statusline=%!ActiveStatusLine()
-	autocmd WinLeave * setlocal statusline=%!InactiveStatusLine()
-	autocmd BufEnter * setlocal statusline=%!ActiveStatusLine()
-	autocmd BufLeave * setlocal statusline=%!InactiveStatusLine()
+	autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveStatusLine()
+	autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveStatusLine()
 augroup END
 set statusline=%!ActiveStatusLine()
-	
 
 " Function for setting an inactive statusline
 function! InactiveStatusLine()
@@ -45,7 +42,6 @@ function! InactiveStatusLine()
 	let s:statusline .= StatusLineFile()
 	let s:statusline .= StatusLineInfo()
 	let s:statusline .= StatusLinePos()
-	
 	return s:statusline
 endfunction
 

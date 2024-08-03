@@ -16,9 +16,6 @@ filetype plugin indent on
 " Set the OS clipboard as Vim's clipboard
 set clipboard=unnamedplus
 
-" Highlight the current line
-set cursorline
-
 " Show line numbers
 set number
 
@@ -240,3 +237,10 @@ set sessionoptions+=winpos,resize
 
 " Restore cursor to last position in file when reopened
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Set the cursorline based on if the window is active or not
+augroup CursorLine
+	autocmd!
+	autocmd WinEnter,BufEnter * setlocal cursorline
+	autocmd WinLeave,BufLeave * setlocal nocursorline
+augroup END
