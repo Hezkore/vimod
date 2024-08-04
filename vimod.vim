@@ -7,7 +7,7 @@
 "                               "
 """""""""""""""""""""""""""""""""
 " VIMod
-let g:vimod_version = "1.3.0"
+let g:vimod_version = "1.3.1"
 autocmd VimEnter * echom "VIMod v" . g:vimod_version
 
 " Load base

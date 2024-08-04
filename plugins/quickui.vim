@@ -315,30 +315,40 @@ function! s:plugin_settings()
 	" Fugitive / Git menu
 	if exists('g:enabled_fugitive') && g:enabled_fugitive == 1
 		call quickui#menu#install('&Git', [
-			\ ["&Open Git", 'Git', "Open the Git status window"],
+			\ ["&Open Git", 'Git', "Open the Git summary window"],
 			\ ["--", ""],
 			\ ["Open &Difference", 'Gdiffsplit', "Diff staged vs working tree"],
 			\ ["Open Git &Blame", 'Git blame', "Blame the current file"],
 			\ ["Open Git &Log", 'Gclog', "Load commit history into the quickfix list"],
 			\ ["--", ""],
+			\ ["&Fetch Remote", 'Git fetch', "Fetch from the remote repository"],
+			\ ["&Pull Remote", 'Git pull', "Pull from the remote repository"],
+			\ ["--", ""],
+			\ ["&Stage File", 'Git add %', "Stage (add) the current file"],
+			\ ["&Unstage File", 'Git reset %', "Unstage (reset) the current file"],
+			\ ["--", ""],
+			\ ["&Commit", 'Git commit', "Commit staged changes"],
+			\ ["Commit &All", 'Git commit --all', "Commit all tracked changes"],
+			\ ["Push to &Remote", 'Git push', "Push to the remote repository"],
 		\ ])
 		
 		if exists('g:enabled_fzf') && g:enabled_fzf == 1
 			call quickui#menu#install('&Git', [
-				\ ["Find Git &Files", 'GFiles', "Git files (git ls-files)"],
-				\ ["Find Git &Status Files", 'GFiles?', "Git files (git status)"],
-				\ ["Find Git &Commits", 'Commits', "Git commits"],
-				\ ["Find Git B&uffer Commits", 'BCommits', "Git commits for buffer; select lines to track changes"],
+				\ ["--", ""],
+				\ ["Show Git Files", 'GFiles', "Git files (git ls-files)"],
+				\ ["Show Git Status Files", 'GFiles?', "Git files (git status)"],
+				\ ["Show Git Commits", 'Commits', "Git commits"],
+				\ ["Show Git Buffer Commits", 'BCommits', "Git commits for buffer; select lines to track changes"],
 			\ ])
 		endif
 		
 		" Add Github gh cli menu, even if gh is not installed
 		call quickui#menu#install('&Git', [
 			\ ["--", ""],
-			\ ["Open &Pull Requests", 'call OpenGithubPullRequests()', "Open pull requests (requires gh)"],
-			\ ["Open &Issues", 'call OpenGithubIssues()', "Open issues (requires gh)"],
-			\ ["Search Issues", 'call SearchGithubIssues()', "Search issues (requires gh)"],
-			\ ["Open &Repository", 'call OpenGithubRepository()', "Open repository externally (requires gh)"],
+			\ ["GitHub Pull Requests", 'call OpenGithubPullRequests()', "Open pull requests (requires gh)"],
+			\ ["GitHub Issues", 'call OpenGithubIssues()', "Open issues (requires gh)"],
+			\ ["GitHub Search Issues", 'call SearchGithubIssues()', "Search issues (requires gh)"],
+			\ ["GitHub Repository", 'call OpenGithubRepository()', "Open repository externally (requires gh)"],
 		\ ])
 		
 		call quickui#menu#change_weight('&Git', 700)

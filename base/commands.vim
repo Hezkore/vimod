@@ -1,5 +1,8 @@
 " VIMod commands
 
+" Show current VIMod version
+command! VIModVersion echo "VIMod v" . g:vimod_version
+
 " Reapply settings
 command! ApplySettings execute 'source $MYVIMRC'
 

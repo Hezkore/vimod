@@ -56,11 +56,14 @@ Read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how t
 ## Troubleshooting
 If you are unsure where your vimrc file is located, run the following command in Vim: `:echo $MYVIMRC`
 
-If you are unsure if the runtime was added correctly, look for the VIMod version number in the lower left corner when starting Vim.\
-If it doesn't say `VIMod vX.X.X`, the runtime was not added correctly.
+If you are unsure if the runtime was added correctly,  run the following command in Vim: `:VIModVersion`\
+If it says "Not an editor command: VIModVersion", the runtime was not added correctly.
 
 VIMod will install and manage all plugins and dependencies automatically when you start Vim for the first time.\
-The install screen will automatically close when the installation is complete, so just sit tight and wait for it to finish.
+The install screen will automatically close when the installation is complete, so just sit tight and wait for it to finish.\
+If it is aborted, VIMod will not function correctly, and you will ned to run `:PlugInstall` manually.
+
+Most errors are due to incorrect plugin installations, so if you encounter any issues, try running `:PlugInstall` and restarting Vim.
 
 ## Updating
 
