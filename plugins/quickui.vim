@@ -271,7 +271,7 @@ function! s:plugin_settings()
 	" Terminal menu
 	call quickui#menu#install('&Terminal', [
 		\ [ "New &Terminal", 'bot terminal ++rows=15', "Open a new terminal" ],
-		\ [ "New Terminal &Persistent", 'bot terminal ++rows=15 ++noclose', "Open a new terminal that becomes an editable buffer" ],
+		\ [ "New Terminal &Persistent", 'bot terminal ++rows=15 ++noclose', "Open new terminal, becomes editable" ],
 		\ [ "Make &Window Terminal", 'terminal ++curwin', "Convert the current window into a terminal" ],
 	\ ], 500)
 	
@@ -304,7 +304,7 @@ function! s:plugin_settings()
 			\ ["Find Command Mappings", 'call fzf#vim#maps("c", 0)', "Command mode mappings"],
 			\ ["Find Terminal Mappings", 'call fzf#vim#maps("t", 0)', "Terminal mode mappings"],
 			\ ["--", ""],
-			\ ["Find Marks", 'Marks', "Marks created by pressing m. Press ' {symbol} to jump to a mark"],
+			\ ["Find Marks", 'Marks', "Jump to marks created with 'm'"],
 			\ ["Find Windows", 'Windows', "Windows"],
 			\ ["Find Changelist", 'Changes', "Changelist across all open buffers"],
 			\ ["Find Colors Schemes", 'Colors', "Search for color schemes"],
@@ -317,7 +317,7 @@ function! s:plugin_settings()
 		call quickui#menu#install('&Git', [
 			\ ["&Open Git", 'Git', "Open the Git status window"],
 			\ ["--", ""],
-			\ ["Open &Difference", 'Gdiffsplit', "Diff staged version of the file side by side with the working tree version"],
+			\ ["Open &Difference", 'Gdiffsplit', "Diff staged vs working tree"],
 			\ ["Open Git &Blame", 'Git blame', "Blame the current file"],
 			\ ["Open Git &Log", 'Gclog', "Load commit history into the quickfix list"],
 			\ ["--", ""],
@@ -328,17 +328,17 @@ function! s:plugin_settings()
 				\ ["Find Git &Files", 'GFiles', "Git files (git ls-files)"],
 				\ ["Find Git &Status Files", 'GFiles?', "Git files (git status)"],
 				\ ["Find Git &Commits", 'Commits', "Git commits"],
-				\ ["Find Git B&uffer Commits", 'BCommits', "Git commits for the current buffer; visual-select lines to track changes in the range"],
+				\ ["Find Git B&uffer Commits", 'BCommits', "Git commits for buffer; select lines to track changes"],
 			\ ])
 		endif
 		
 		" Add Github gh cli menu, even if gh is not installed
 		call quickui#menu#install('&Git', [
 			\ ["--", ""],
-			\ ["Open &Pull Requests", 'call OpenGithubPullRequests()', "Open the pull requests for the current repository (requires gh)"],
-			\ ["Open &Issues", 'call OpenGithubIssues()', "Open the issues for the current repository (requires gh)"],
-			\ ["Search Issues", 'call SearchGithubIssues()', "Search for issues in the current repository (requires gh)"],
-			\ ["Open &Repository", 'call OpenGithubRepository()', "Open the repository for the current file (requires gh)"],
+			\ ["Open &Pull Requests", 'call OpenGithubPullRequests()', "Open pull requests (requires gh)"],
+			\ ["Open &Issues", 'call OpenGithubIssues()', "Open issues (requires gh)"],
+			\ ["Search Issues", 'call SearchGithubIssues()', "Search issues (requires gh)"],
+			\ ["Open &Repository", 'call OpenGithubRepository()', "Open repository externally (requires gh)"],
 		\ ])
 		
 		call quickui#menu#change_weight('&Git', 700)
@@ -358,7 +358,7 @@ function! s:plugin_settings()
 			\ ["&Next Diagnostic", 'LspNextDiagnostic', "Navigate to the next diagnostic issue"],
 			\ ["&Previous Diagnostic", 'LspPreviousDiagnostic', "Navigate to the previous diagnostic issue"],
 			\ ["--"],
-			\ ["Show Conte&xt Menu\tK", 'call quickui#tools#clever_context("k", g:context_menu_k, {})', "Show the context menu for the current LSP server"],
+			\ ["Show Conte&xt Menu\tK", 'call quickui#tools#clever_context("k", g:context_menu_k, {})', "Show LSP context menu"],
 			\ ["--"],
 			\ ["%{LspRunningForBuffer()==1? 'S&top':'S&tart'} LSP", 'call LspToggleState()'],
 			\ ["%{LspRunningForBuffer()==1? '&Update':'&Install'} LSP Server", 'LspInstallServer'],
