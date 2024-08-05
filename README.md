@@ -53,6 +53,17 @@ Read the [Wiki](https://github.com/Hezkore/vimod/wiki) for instructions on how t
 > Get a local copy of the wiki pages:
 > `git clone https://github.com/Hezkore/vimod.wiki.git`
 
+## Prerequisites
+* Vim 9.0+ _(some plugins will not work with older versions)_
+* A terminal size of at least 80 columns and 29 rows _(for the Quick UI to display correctly)_
+
+GitHub Integration _(optional)_:
+* [GitHub CLI](https://cli.github.com/)
+
+GitHub Copilot _(optional)_:
+* GitHub [Copilot Subscription](https://github.com/features/copilot/plans)
+* [Node.js](https://nodejs.org)
+
 ## Troubleshooting
 If you are unsure where your vimrc file is located, run the following command in Vim: `:echo $MYVIMRC`
 
