@@ -61,7 +61,7 @@ GitHub Integration _(optional)_:
 * [GitHub CLI](https://cli.github.com/)
 
 GitHub Copilot _(optional)_:
-* GitHub [Copilot Subscription](https://github.com/features/copilot/plans)
+* GitHub [Copilot Subscription](https://github.com/features/copilot/plans) _(free tier is fine)_
 * [Node.js](https://nodejs.org)
 
 ## Troubleshooting

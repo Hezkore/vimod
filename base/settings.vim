@@ -86,6 +86,9 @@ else
 	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
+" Ignore case in wildmenu
+set wildignorecase
+
 " Omni completion settings
 set omnifunc=syntaxcomplete#Complete
 
@@ -205,7 +208,7 @@ set confirm
 set selectmode=mouse,key
 
 " Select with SHIFT + ARROW for Vim-noobs
-set keymodel=startsel,stopsel
+"set keymodel=startsel,stopsel
 
 " Enable select with mouse in insert mode
 set selection=exclusive
