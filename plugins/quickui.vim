@@ -416,6 +416,7 @@ function! s:plugin_settings()
 	" Copilot menu
 	if exists('g:enabled_copilot') && g:enabled_copilot == 1
 		call quickui#menu#install('&Copilot', [
+			\ ["Check Copilot &Status", 'Copilot status'],
 			\ ["%{copilot#Enabled()==1? 'Disable':'Enable'} Copilot", 'call ToggleCopilot() | Copilot status'],
 			\ ["--", ''],
 			\ ["Show Suggestion &Panel\t%{LeaderKey()}+c+p", 'Copilot panel'],
